@@ -13,10 +13,10 @@ const walk = async (dir) => {
   return nested.flat();
 };
 
-const files = (await walk(SRC)).filter((f) => /\.(jpe?g|png)$/i.test(f));
+const files = (await walk(SRC)).filter((f) => /\.(jpe?g|png|webp)$/i.test(f));
 
 for (const file of files) {
-  const rel = path.relative(SRC, file).replace(/\.(jpe?g|png)$/i, ".webp");
+  const rel = path.relative(SRC, file).replace(/\.(jpe?g|png|webp)$/i, ".webp");
   const dest = path.join(OUT, rel);
   await mkdir(path.dirname(dest), { recursive: true });
   await sharp(file).resize({ width: 1920, withoutEnlargement: true }).webp({ quality: 80 }).toFile(dest);
