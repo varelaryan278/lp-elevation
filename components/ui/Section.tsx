@@ -1,10 +1,10 @@
 import type { ReactNode } from "react";
 
 const variants = {
-  ink: "bg-ink text-cream/90",
-  cream: "bg-cream text-ink",
-  wine: "bg-wine text-cream/90",
-  plum: "bg-plum text-cream/90",
+  ink: "bg-ink text-cream/90 [--accent:var(--color-gold)]",
+  cream: "bg-cream text-ink [--accent:var(--color-wine)]",
+  wine: "bg-wine text-cream/90 [--accent:var(--color-gold)]",
+  plum: "bg-plum text-cream/90 [--accent:var(--color-gold)]",
 } as const;
 
 export type SectionBg = keyof typeof variants;

@@ -32,6 +32,7 @@ html {
 }
 
 body {
+  --accent: var(--color-gold);
   background-color: var(--color-ink);
   color: var(--color-cream);
   font-family: var(--font-sans);

@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, statSync } from "node:fs";
 import sharp from "sharp";
 import { describe, expect, it } from "vitest";
 import { carol } from "@/content/carol";
@@ -26,6 +26,10 @@ describe("conteúdo", () => {
     expect(data[3]).toBe(0);
     const haste = (Math.round(info.height / 2) * info.width + Math.round(info.width * 0.32)) * 4 + 3;
     expect(data[haste]).toBeGreaterThan(200);
+  });
+
+  it("monograma pesa menos de 80KB", () => {
+    expect(statSync("public/img/brand/monograma.png").size).toBeLessThan(80 * 1024);
   });
 
   it("fotos referenciadas existem em public/", () => {

@@ -23,7 +23,7 @@ for (const file of files) {
 }
 
 const { data, info } = await sharp("assets/brand/monograma.jpg")
-  .resize(640, 640)
+  .resize(480, 480)
   .removeAlpha()
   .raw()
   .toBuffer({ resolveWithObject: true });
@@ -40,7 +40,7 @@ for (let i = 0, o = 0; i < data.length; i += 3, o += 4) {
   rgba[o + 3] = a;
 }
 await sharp(rgba, { raw: { width: info.width, height: info.height, channels: 4 } })
-  .png()
+  .png({ palette: true, quality: 90, compressionLevel: 9 })
   .toFile("public/img/brand/monograma.png");
 
 const monograma = await sharp("assets/brand/monograma.jpg").resize(420, 420).toBuffer();
