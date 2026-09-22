@@ -1,9 +1,21 @@
+import { Carol } from "@/components/home/Carol";
+import { CtaFinal } from "@/components/home/CtaFinal";
+import { EventoTeaser } from "@/components/home/EventoTeaser";
+import { Galeria } from "@/components/home/Galeria";
+import { Hero } from "@/components/home/Hero";
+import { Manifesto } from "@/components/home/Manifesto";
+import { Pilares } from "@/components/home/Pilares";
+
 const Home = () => (
-  <div className="flex min-h-svh items-center justify-center bg-ink">
-    <h1 className="animate-fade-up font-serif text-6xl uppercase tracking-[0.35em] text-gold">
-      Elevation
-    </h1>
-  </div>
+  <>
+    <Hero />
+    <Manifesto />
+    <Pilares />
+    <EventoTeaser />
+    <Carol />
+    <Galeria />
+    <CtaFinal />
+  </>
 );
 
 export default Home;
