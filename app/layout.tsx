@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
 import { sans, serif } from "./fonts";
 import "./globals.css";
 
@@ -21,7 +23,9 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: LayoutProps<"/">) => (
   <html lang="pt-BR" className={`${serif.variable} ${sans.variable} h-full antialiased`}>
     <body className="flex min-h-full flex-col">
+      <Header />
       <main className="flex-1">{children}</main>
+      <Footer />
     </body>
   </html>
 );
