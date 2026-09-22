@@ -43,6 +43,13 @@ export const MobileMenu = ({ items }: Props) => {
           >
             Garantir vaga
           </Link>
+          <Link
+            href="/evento#patrocinar"
+            onClick={close}
+            className="border border-gold px-8 py-4 font-sans text-xs uppercase tracking-[0.25em] text-gold"
+          >
+            Patrocinar
+          </Link>
         </div>
       )}
     </div>

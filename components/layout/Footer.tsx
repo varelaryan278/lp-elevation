@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Monograma } from "@/components/ui/Monograma";
 import { marca, pilares } from "@/content/marca";
@@ -9,6 +10,12 @@ export const Footer = () => (
       <Eyebrow>{pilares.map((p) => p.titulo).join(" • ")}</Eyebrow>
       <p className="font-serif text-xl italic text-cream">{marca.tagline}</p>
       <nav className="flex flex-wrap justify-center gap-8 font-sans text-xs uppercase tracking-[0.25em]">
+        <Link href="/evento#interesse" className="hover:text-gold">
+          Garantir vaga
+        </Link>
+        <Link href="/evento#patrocinar" className="hover:text-gold">
+          Patrocinar
+        </Link>
         <a href={marca.instagram} target="_blank" rel="noopener" className="hover:text-gold">
           Instagram
         </a>

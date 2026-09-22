@@ -46,6 +46,18 @@ export const marca = {
       "Autoridade nasce no silêncio do processo.",
     ],
   },
+  interesse: {
+    participar: {
+      eyebrow: "Garantir vaga",
+      titulo: "Quero estar nesse ambiente.",
+      texto: "Preencha e a gente continua a conversa no WhatsApp.",
+    },
+    patrocinar: {
+      eyebrow: "Patrocinar",
+      titulo: "Quero colocar minha marca nesse movimento.",
+      texto: "Conte um pouco sobre a empresa e a gente apresenta as cotas no WhatsApp.",
+    },
+  },
   site: "https://elevation.com.br",
   instagram: "https://instagram.com/elevation",
   email: "contato@elevation.com.br",

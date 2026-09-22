@@ -9,4 +9,10 @@ describe("Header", () => {
     expect(headerTag).not.toContain("backdrop-blur");
     expect(html).toContain("backdrop-blur");
   });
+
+  it("oferece os dois caminhos: garantir vaga e patrocinar", () => {
+    const html = renderToStaticMarkup(<Header />);
+    expect(html).toContain('href="/evento#interesse"');
+    expect(html).toContain('href="/evento#patrocinar"');
+  });
 });

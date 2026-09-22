@@ -22,6 +22,9 @@ export const Header = () => (
             {item.label}
           </Link>
         ))}
+        <Button href="/evento#patrocinar" variant="outline">
+          Patrocinar
+        </Button>
         <Button href="/evento#interesse">Garantir vaga</Button>
       </nav>
       <div className="relative z-50">
