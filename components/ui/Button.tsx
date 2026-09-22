@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import type { Modo } from "@/lib/intent";
+import { IntentLink } from "./IntentLink";
 
 const variants = {
   primary: "bg-gold text-ink hover:bg-gold-light",
@@ -9,15 +11,25 @@ const variants = {
 type Props = {
   href: string;
   variant?: keyof typeof variants;
+  intent?: Modo;
   className?: string;
   children: ReactNode;
 };
 
-export const Button = ({ href, variant = "primary", className = "", children }: Props) => (
-  <Link
-    href={href}
-    className={`inline-flex items-center justify-center px-8 py-4 font-sans text-xs uppercase tracking-[0.25em] transition-colors duration-300 ${variants[variant]} ${className}`}
-  >
-    {children}
-  </Link>
-);
+export const Button = ({ href, variant = "primary", intent, className = "", children }: Props) => {
+  const classes = `inline-flex items-center justify-center px-8 py-4 font-sans text-xs uppercase tracking-[0.25em] transition-colors duration-300 ${variants[variant]} ${className}`;
+
+  if (intent) {
+    return (
+      <IntentLink href={href} intent={intent} className={classes}>
+        {children}
+      </IntentLink>
+    );
+  }
+
+  return (
+    <Link href={href} className={classes}>
+      {children}
+    </Link>
+  );
+};

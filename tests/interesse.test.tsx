@@ -2,10 +2,13 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { Interesse } from "@/components/evento/Interesse";
+import { IntentLink } from "@/components/ui/IntentLink";
+import { setIntent } from "@/lib/intent";
 
 afterEach(() => {
   cleanup();
   window.location.hash = "";
+  setIntent(null);
   vi.restoreAllMocks();
 });
 
@@ -31,6 +34,26 @@ describe("Interesse", () => {
     window.location.hash = "#patrocinar";
     render(<Interesse numero="5543000000000" dataLabel="12/10" />);
     expect(screen.getByPlaceholderText("Empresa")).toBeTruthy();
+  });
+
+  it("troca de modo quando um CTA de intenção é clicado na mesma página", () => {
+    render(
+      <>
+        <IntentLink href="/evento#patrocinar" intent="patrocinar">
+          Patrocinar
+        </IntentLink>
+        <IntentLink href="/evento#interesse" intent="participar">
+          Garantir vaga
+        </IntentLink>
+        <Interesse numero="5543000000000" dataLabel="12/10" />
+      </>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Quero participar" }));
+    fireEvent.click(screen.getByRole("link", { name: "Patrocinar" }));
+    expect(screen.getByPlaceholderText("Empresa")).toBeTruthy();
+
+    fireEvent.click(screen.getByRole("link", { name: "Garantir vaga" }));
+    expect(screen.getByPlaceholderText("Cidade")).toBeTruthy();
   });
 
   it("envia a mensagem de patrocínio pro WhatsApp", () => {

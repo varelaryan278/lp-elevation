@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { IntentLink } from "@/components/ui/IntentLink";
 import type { NavItem } from "@/content/types";
 
 type Props = { items: NavItem[] };
@@ -36,20 +37,22 @@ export const MobileMenu = ({ items }: Props) => {
               {item.label}
             </Link>
           ))}
-          <Link
+          <IntentLink
             href="/evento#interesse"
+            intent="participar"
             onClick={close}
             className="mt-6 bg-gold px-8 py-4 font-sans text-xs uppercase tracking-[0.25em] text-ink"
           >
             Garantir vaga
-          </Link>
-          <Link
+          </IntentLink>
+          <IntentLink
             href="/evento#patrocinar"
+            intent="patrocinar"
             onClick={close}
             className="border border-gold px-8 py-4 font-sans text-xs uppercase tracking-[0.25em] text-gold"
           >
             Patrocinar
-          </Link>
+          </IntentLink>
         </div>
       )}
     </div>

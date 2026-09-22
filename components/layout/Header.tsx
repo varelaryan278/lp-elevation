@@ -22,10 +22,12 @@ export const Header = () => (
             {item.label}
           </Link>
         ))}
-        <Button href="/evento#patrocinar" variant="outline">
+        <Button href="/evento#patrocinar" variant="outline" intent="patrocinar">
           Patrocinar
         </Button>
-        <Button href="/evento#interesse">Garantir vaga</Button>
+        <Button href="/evento#interesse" intent="participar">
+          Garantir vaga
+        </Button>
       </nav>
       <div className="relative z-50">
         <MobileMenu items={nav} />

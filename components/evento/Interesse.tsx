@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useSyncExternalStore, type FormEvent } from "react";
+import { useSyncExternalStore, type FormEvent } from "react";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Section } from "@/components/ui/Section";
 import { marca } from "@/content/marca";
+import { getIntent, getServerIntent, setIntent, subscribeIntent } from "@/lib/intent";
 import { buildMensagem, buildMensagemPatrocinio, buildWhatsAppUrl } from "@/lib/whatsapp";
-
-type Modo = "participar" | "patrocinar";
 
 const origens = ["Instagram", "Indicação", "Edição anterior", "Outro"];
 
@@ -18,24 +17,10 @@ const aba = (ativo: boolean) =>
     ativo ? "bg-gold text-ink" : "border border-cream/30 text-cream/80 hover:border-gold hover:text-gold"
   }`;
 
-const subscribeHash = (cb: () => void) => {
-  window.addEventListener("hashchange", cb);
-  return () => window.removeEventListener("hashchange", cb);
-};
-
-const useHash = () =>
-  useSyncExternalStore(
-    subscribeHash,
-    () => window.location.hash,
-    () => "",
-  );
-
 type Props = { numero: string; dataLabel: string };
 
 export const Interesse = ({ numero, dataLabel }: Props) => {
-  const hash = useHash();
-  const [escolha, setEscolha] = useState<{ hash: string; modo: Modo } | null>(null);
-  const modo: Modo = escolha?.hash === hash ? escolha.modo : hash === "#patrocinar" ? "patrocinar" : "participar";
+  const modo = useSyncExternalStore(subscribeIntent, getIntent, getServerIntent);
   const textos = marca.interesse[modo];
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -60,10 +45,10 @@ export const Interesse = ({ numero, dataLabel }: Props) => {
       <div id="patrocinar" className="scroll-mt-40" />
       <div className="mx-auto max-w-xl">
         <div className="flex gap-3">
-          <button type="button" className={aba(modo === "participar")} onClick={() => setEscolha({ hash, modo: "participar" })}>
+          <button type="button" className={aba(modo === "participar")} onClick={() => setIntent("participar")}>
             Quero participar
           </button>
-          <button type="button" className={aba(modo === "patrocinar")} onClick={() => setEscolha({ hash, modo: "patrocinar" })}>
+          <button type="button" className={aba(modo === "patrocinar")} onClick={() => setIntent("patrocinar")}>
             Quero patrocinar
           </button>
         </div>
