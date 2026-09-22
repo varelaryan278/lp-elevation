@@ -1,6 +1,6 @@
 import type { Edicao } from "./types";
 
-const fotos = Array.from({ length: 11 }, (_, i) => `/img/edicoes/1/${String(i + 1).padStart(2, "0")}.webp`);
+const fotos = Array.from({ length: 10 }, (_, i) => `/img/edicoes/1/${String(i + 1).padStart(2, "0")}.webp`);
 
 export const edicoes: Edicao[] = [
   {
