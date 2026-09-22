@@ -36,7 +36,13 @@ export const Interesse = ({ numero, dataLabel }: Props) => {
           <input name="nome" placeholder="Nome" required autoComplete="name" className={campo} />
           <input name="whatsapp" type="tel" placeholder="WhatsApp com DDD" required autoComplete="tel" className={campo} />
           <input name="cidade" placeholder="Cidade" required autoComplete="address-level2" className={campo} />
-          <select name="origem" required defaultValue="" className={`${campo} appearance-none`}>
+          <select
+            name="origem"
+            required
+            defaultValue=""
+            aria-label="Como conheceu o Elevation?"
+            className={`${campo} appearance-none`}
+          >
             <option value="" disabled>
               Como conheceu o Elevation?
             </option>

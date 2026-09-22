@@ -17,13 +17,10 @@ export const Lotes = ({ lotes }: Props) => (
       {lotes.map((l) => {
         const ativo = l.status === "disponivel";
         return (
-          <li
-            key={l.nome}
-            className={`border p-8 ${ativo ? "border-gold" : "border-cream/20 opacity-60"}`}
-          >
+          <li key={l.nome} className={`border p-8 ${ativo ? "border-gold" : "border-cream/20"}`}>
             <p className="font-sans text-xs uppercase tracking-[0.25em] text-gold">{l.nome}</p>
-            <p className="mt-4 font-serif text-4xl text-cream">{l.valor}</p>
-            <p className="mt-6 font-sans text-xs uppercase tracking-[0.25em] text-cream/70">{rotulo[l.status]}</p>
+            <p className={`mt-4 font-serif text-4xl ${ativo ? "text-cream" : "text-cream/50"}`}>{l.valor}</p>
+            <p className="mt-6 font-sans text-xs uppercase tracking-[0.25em] text-cream/80">{rotulo[l.status]}</p>
             {ativo && (
               <a
                 href="#interesse"

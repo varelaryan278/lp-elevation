@@ -1,14 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import type { NavItem } from "@/content/types";
 
 type Props = { items: NavItem[] };
 
 export const MobileMenu = ({ items }: Props) => {
-  const [open, setOpen] = useState(false);
-  const close = () => setOpen(false);
+  const [openAt, setOpenAt] = useState<string | null>(null);
+  const pathname = usePathname();
+  const open = openAt === pathname;
+  const close = () => setOpenAt(null);
 
   return (
     <div className="md:hidden">
@@ -16,7 +19,7 @@ export const MobileMenu = ({ items }: Props) => {
         type="button"
         aria-label={open ? "Fechar menu" : "Abrir menu"}
         aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => setOpenAt(open ? null : pathname)}
         className="font-sans text-xs uppercase tracking-[0.25em] text-cream"
       >
         {open ? "Fechar" : "Menu"}

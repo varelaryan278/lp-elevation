@@ -1,6 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { Convidadas } from "@/components/evento/Convidadas";
+import { Interesse } from "@/components/evento/Interesse";
 import { Lotes } from "@/components/evento/Lotes";
 import { Programacao } from "@/components/evento/Programacao";
 
@@ -19,11 +20,25 @@ describe("Lotes", () => {
     expect(html).toContain("Em breve");
     expect(html.match(/href="#interesse"/g)).toHaveLength(1);
   });
+
+  it("não apaga o card inativo inteiro, só o valor", () => {
+    const html = renderToStaticMarkup(<Lotes lotes={[{ nome: "2º lote", valor: "R$ 247", status: "esgotado" }]} />);
+    expect(html).not.toContain("opacity-60");
+    expect(html).toMatch(/<p class="[^"]*text-cream\/50[^"]*">R\$ 247<\/p>/);
+  });
 });
 
 describe("Convidadas", () => {
   it("não renderiza nada com lista vazia", () => {
     expect(renderToStaticMarkup(<Convidadas convidadas={[]} />)).toBe("");
+  });
+});
+
+describe("Interesse", () => {
+  it("dá nome acessível ao select de origem", () => {
+    const html = renderToStaticMarkup(<Interesse numero="5543000000000" dataLabel="12/10" />);
+    const select = html.match(/<select[^>]*>/)?.[0] ?? "";
+    expect(select).toContain('aria-label="Como conheceu o Elevation?"');
   });
 });
 
