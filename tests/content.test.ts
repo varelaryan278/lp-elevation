@@ -1,4 +1,5 @@
 import { existsSync } from "node:fs";
+import sharp from "sharp";
 import { describe, expect, it } from "vitest";
 import { carol } from "@/content/carol";
 import { convidadas } from "@/content/convidadas";
@@ -17,6 +18,14 @@ describe("conteúdo", () => {
     for (const lote of evento.lotes) {
       expect(["disponivel", "esgotado", "em-breve"]).toContain(lote.status);
     }
+  });
+
+  it("monograma tem canal alpha e cantos transparentes", async () => {
+    const { data, info } = await sharp("public/img/brand/monograma.png").raw().toBuffer({ resolveWithObject: true });
+    expect(info.channels).toBe(4);
+    expect(data[3]).toBe(0);
+    const haste = (Math.round(info.height / 2) * info.width + Math.round(info.width * 0.32)) * 4 + 3;
+    expect(data[haste]).toBeGreaterThan(200);
   });
 
   it("fotos referenciadas existem em public/", () => {
