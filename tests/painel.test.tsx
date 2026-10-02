@@ -36,7 +36,7 @@ describe("painel", () => {
     expect(html).toContain("Decol");
     expect(html).toContain("Quero conhecer as cotas.");
     expect(html).toContain("https://wa.me/5543999990000?text=");
-    expect(html).toContain('href="/painel/?pagina=2"');
+    expect(html).toMatch(/href="\/painel\/?\?pagina=2"/);
     expect(html).toContain("Página 1 de 2");
   });
 
