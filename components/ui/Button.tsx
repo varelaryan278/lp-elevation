@@ -19,6 +19,14 @@ type Props = {
 export const Button = ({ href, variant = "primary", intent, className = "", children }: Props) => {
   const classes = `inline-flex items-center justify-center px-8 py-4 font-sans text-xs uppercase tracking-[0.25em] transition-colors duration-300 ${variants[variant]} ${className}`;
 
+  if (href.startsWith("https://")) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={classes}>
+        {children}
+      </a>
+    );
+  }
+
   if (intent) {
     return (
       <IntentLink href={href} intent={intent} className={classes}>

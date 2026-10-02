@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { IntentLink } from "@/components/ui/IntentLink";
+import { marca } from "@/content/marca";
 import type { NavItem } from "@/content/types";
 
 type Props = { items: NavItem[] };
@@ -37,14 +38,15 @@ export const MobileMenu = ({ items }: Props) => {
               {item.label}
             </Link>
           ))}
-          <IntentLink
-            href="/evento#interesse"
-            intent="participar"
+          <a
+            href={marca.grupoWhatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={close}
             className="mt-6 bg-gold px-8 py-4 font-sans text-xs uppercase tracking-[0.25em] text-ink"
           >
-            Garantir vaga
-          </IntentLink>
+            Entrar no grupo
+          </a>
           <IntentLink
             href="/evento#patrocinar"
             intent="patrocinar"

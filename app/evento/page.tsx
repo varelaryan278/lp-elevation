@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Convidadas } from "@/components/evento/Convidadas";
 import { Detalhes } from "@/components/evento/Detalhes";
 import { Interesse } from "@/components/evento/Interesse";
-import { Lotes } from "@/components/evento/Lotes";
 import { Programacao } from "@/components/evento/Programacao";
 import { convidadas } from "@/content/convidadas";
 import { evento } from "@/content/evento";
@@ -18,7 +17,6 @@ const EventoPage = () => (
     <Detalhes evento={evento} />
     <Programacao blocos={evento.programacao} />
     <Convidadas convidadas={convidadas} />
-    <Lotes lotes={evento.lotes} />
     <Interesse numero={marca.whatsapp} dataLabel={evento.dataLabel} />
   </>
 );

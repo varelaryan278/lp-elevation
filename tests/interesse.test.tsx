@@ -19,6 +19,15 @@ const preencher = (campos: Record<string, string>) => {
 };
 
 describe("Interesse", () => {
+  it("abre o grupo informado ao clicar em Quero participar", () => {
+    render(<Interesse numero="5543000000000" dataLabel="12/10" />);
+    const link = screen.getByRole("link", { name: "Quero participar" });
+
+    expect(link.getAttribute("href")).toBe("https://chat.whatsapp.com/I2lDDGTGJVKEexKVmnX7iw");
+    expect(link.getAttribute("target")).toBe("_blank");
+    expect(link.getAttribute("rel")).toBe("noopener noreferrer");
+  });
+
   it("começa em participar e troca pra patrocinar pelo botão", () => {
     render(<Interesse numero="5543000000000" dataLabel="12/10" />);
     expect(screen.getByPlaceholderText("Cidade")).toBeTruthy();
@@ -48,7 +57,7 @@ describe("Interesse", () => {
         <Interesse numero="5543000000000" dataLabel="12/10" />
       </>,
     );
-    fireEvent.click(screen.getByRole("button", { name: "Quero participar" }));
+    fireEvent.click(screen.getByRole("link", { name: "Quero participar" }));
     fireEvent.click(screen.getByRole("link", { name: "Patrocinar" }));
     expect(screen.getByPlaceholderText("Empresa")).toBeTruthy();
 

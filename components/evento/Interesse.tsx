@@ -45,9 +45,15 @@ export const Interesse = ({ numero, dataLabel }: Props) => {
       <div id="patrocinar" className="scroll-mt-40" />
       <div className="mx-auto max-w-xl">
         <div className="flex gap-3">
-          <button type="button" className={aba(modo === "participar")} onClick={() => setIntent("participar")}>
+          <a
+            href={marca.grupoWhatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={aba(modo === "participar")}
+            onClick={() => setIntent("participar")}
+          >
             Quero participar
-          </button>
+          </a>
           <button type="button" className={aba(modo === "patrocinar")} onClick={() => setIntent("patrocinar")}>
             Quero patrocinar
           </button>

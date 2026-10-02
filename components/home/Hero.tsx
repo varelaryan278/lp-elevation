@@ -29,8 +29,8 @@ export const Hero = () => {
         </h1>
         <p className="mt-4 font-serif text-xl italic text-gold md:text-2xl">{marca.assinatura}</p>
         <Eyebrow className="mt-10">{pilares.map((p) => p.titulo).join(" • ")}</Eyebrow>
-        <Button href="/evento#interesse" className="mt-12">
-          Garantir vaga
+        <Button href={marca.grupoWhatsapp} className="mt-12">
+          Entrar no grupo
         </Button>
       </div>
     </section>

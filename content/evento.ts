@@ -16,8 +16,4 @@ export const evento: Evento = {
     { horario: "17h", titulo: "Networking guiado", descricao: "Dinâmica para que as mulheres realmente se conheçam." },
     { horario: "18h", titulo: "Encerramento", descricao: "Momento de conexão, fotos e despedida." },
   ],
-  lotes: [
-    { nome: "1º lote", valor: "R$ 197", status: "disponivel" },
-    { nome: "2º lote", valor: "R$ 247", status: "em-breve" },
-  ],
 };

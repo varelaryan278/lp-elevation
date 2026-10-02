@@ -10,9 +10,9 @@ export const Footer = () => (
       <Eyebrow>{pilares.map((p) => p.titulo).join(" • ")}</Eyebrow>
       <p className="font-serif text-xl italic text-cream">{marca.tagline}</p>
       <nav className="flex flex-wrap justify-center gap-8 font-sans text-xs uppercase tracking-[0.25em]">
-        <IntentLink href="/evento#interesse" intent="participar" className="hover:text-gold">
-          Garantir vaga
-        </IntentLink>
+        <a href={marca.grupoWhatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-gold">
+          Entrar no grupo
+        </a>
         <IntentLink href="/evento#patrocinar" intent="patrocinar" className="hover:text-gold">
           Patrocinar
         </IntentLink>
@@ -21,9 +21,6 @@ export const Footer = () => (
         </a>
         <a href={`https://wa.me/${marca.whatsapp}`} target="_blank" rel="noopener" className="hover:text-gold">
           WhatsApp
-        </a>
-        <a href={marca.grupoWhatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-gold">
-          Grupo do WhatsApp
         </a>
         <a href={`mailto:${marca.email}`} className="hover:text-gold">
           E-mail

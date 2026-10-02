@@ -25,8 +25,8 @@ export const Header = () => (
         <Button href="/evento#patrocinar" variant="outline" intent="patrocinar">
           Patrocinar
         </Button>
-        <Button href="/evento#interesse" intent="participar">
-          Garantir vaga
+        <Button href={marca.grupoWhatsapp}>
+          Entrar no grupo
         </Button>
       </nav>
       <div className="relative z-50">

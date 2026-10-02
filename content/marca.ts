@@ -48,9 +48,9 @@ export const marca = {
   },
   interesse: {
     participar: {
-      eyebrow: "Garantir vaga",
-      titulo: "Quero estar nesse ambiente.",
-      texto: "Preencha e a gente continua a conversa no WhatsApp.",
+      eyebrow: "Grupo do WhatsApp",
+      titulo: "Faça parte do grupo Elevation.",
+      texto: "Entre no grupo para acompanhar as novidades, os encontros e as próximas edições do movimento.",
     },
     patrocinar: {
       eyebrow: "Patrocinar",
