@@ -17,7 +17,7 @@ const EventoPage = () => (
     <Detalhes evento={evento} />
     <Programacao blocos={evento.programacao} />
     <Convidadas convidadas={convidadas} />
-    <Interesse numero={marca.whatsapp} dataLabel={evento.dataLabel} />
+    <Interesse />
   </>
 );
 

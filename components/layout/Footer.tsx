@@ -26,6 +26,7 @@ export const Footer = () => (
           E-mail
         </a>
       </nav>
+      <a href="/painel/" className="text-xs text-cream/50 hover:text-gold">Painel da organização</a>
       <p className="font-sans text-xs text-cream/50">
         © {new Date().getFullYear()} {marca.nome}. {marca.assinatura}.
       </p>

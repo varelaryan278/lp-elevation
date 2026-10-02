@@ -55,7 +55,7 @@ export const marca = {
     patrocinar: {
       eyebrow: "Patrocinar",
       titulo: "Quero colocar minha marca nesse movimento.",
-      texto: "Conte um pouco sobre a empresa e a gente apresenta as cotas no WhatsApp.",
+      texto: "Conte um pouco sobre sua empresa. A organização entrará em contato pelo WhatsApp para apresentar as possibilidades de patrocínio.",
     },
   },
   site: "https://elevation.com.br",
