@@ -4,7 +4,6 @@ import { describe, expect, it } from "vitest";
 import { carol } from "@/content/carol";
 import { convidadas } from "@/content/convidadas";
 import { edicoes } from "@/content/edicoes";
-import { evento } from "@/content/evento";
 import { marca } from "@/content/marca";
 
 const publicPath = (p: string) => `public${p}`;
@@ -14,10 +13,8 @@ describe("conteúdo", () => {
     expect(marca.whatsapp).toMatch(/^55\d{10,11}$/);
   });
 
-  it("lotes usam status válido", () => {
-    for (const lote of evento.lotes) {
-      expect(["disponivel", "esgotado", "em-breve"]).toContain(lote.status);
-    }
+  it("grupo aponta para o convite informado", () => {
+    expect(marca.grupoWhatsapp).toBe("https://chat.whatsapp.com/I2lDDGTGJVKEexKVmnX7iw");
   });
 
   it("monograma tem canal alpha e cantos transparentes", async () => {

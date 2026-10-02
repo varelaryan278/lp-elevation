@@ -17,6 +17,16 @@ afterEach(() => {
 });
 
 describe("MobileMenu", () => {
+  it("oferece acesso direto ao grupo e fecha o menu ao clicar", () => {
+    render(<MobileMenu items={items} />);
+    fireEvent.click(screen.getByRole("button", { name: "Abrir menu" }));
+    const link = screen.getByRole("link", { name: "Entrar no grupo" });
+    expect(link.getAttribute("href")).toBe("https://chat.whatsapp.com/I2lDDGTGJVKEexKVmnX7iw");
+    expect(link.getAttribute("target")).toBe("_blank");
+    fireEvent.click(link);
+    expect(screen.queryByRole("link", { name: "Entrar no grupo" })).toBeNull();
+  });
+
   it("fecha quando a rota muda por fora (logo, voltar/avançar)", () => {
     const { rerender } = render(<MobileMenu items={items} />);
     fireEvent.click(screen.getByRole("button", { name: "Abrir menu" }));

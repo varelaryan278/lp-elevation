@@ -10,9 +10,10 @@ describe("Header", () => {
     expect(html).toContain("backdrop-blur");
   });
 
-  it("oferece os dois caminhos: garantir vaga e patrocinar", () => {
+  it("oferece entrada direta no grupo e patrocínio", () => {
     const html = renderToStaticMarkup(<Header />);
-    expect(html).toContain('href="/evento#interesse"');
+    expect(html).toContain('href="https://chat.whatsapp.com/I2lDDGTGJVKEexKVmnX7iw"');
+    expect(html).not.toContain("Garantir vaga");
     expect(html).toContain('href="/evento#patrocinar"');
   });
 });

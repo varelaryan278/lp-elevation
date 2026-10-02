@@ -42,7 +42,9 @@ export default async function Painel({ searchParams }: { searchParams: Promise<{
           <h1 className="font-serif text-4xl text-cream md:text-5xl">Pedidos de patrocínio</h1>
           <p className="mt-4 text-sm text-cream/70">Acompanhe as empresas interessadas e continue a conversa pelo WhatsApp.</p>
         </div>
-        <a href="/painel/" className="border border-gold px-6 py-3 text-sm text-gold hover:bg-gold hover:text-ink">Atualizar pedidos</a>
+        <form action="/painel/" method="get">
+          <button type="submit" className="border border-gold px-6 py-3 text-sm text-gold hover:bg-gold hover:text-ink">Atualizar pedidos</button>
+        </form>
       </div>
       {erro ? <p role="alert" className="mt-12 border border-gold/40 p-6 text-cream">{erro}</p> : (
         <>

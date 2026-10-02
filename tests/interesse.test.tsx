@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { Interesse } from "@/components/evento/Interesse";
 import { IntentLink } from "@/components/ui/IntentLink";
@@ -9,74 +9,65 @@ afterEach(() => {
   cleanup();
   window.location.hash = "";
   setIntent(null);
-  vi.restoreAllMocks();
+  vi.unstubAllGlobals();
 });
 
-const preencher = (campos: Record<string, string>) => {
+const preencher = () => {
+  const campos = { nome: "Ana", empresa: "Decol", whatsapp: "43999990000", mensagem: "Quero conhecer as cotas." };
   for (const [nome, valor] of Object.entries(campos)) {
     fireEvent.change(document.querySelector(`[name="${nome}"]`)!, { target: { value: valor } });
   }
 };
 
 describe("Interesse", () => {
-  it("abre o grupo informado ao clicar em Quero participar", () => {
-    render(<Interesse numero="5543000000000" dataLabel="12/10" />);
-    const link = screen.getByRole("link", { name: "Quero participar" });
-
+  it("abre o grupo diretamente sem pedir dados pessoais", () => {
+    render(<Interesse />);
+    const link = screen.getByRole("link", { name: "Entrar no grupo" });
     expect(link.getAttribute("href")).toBe("https://chat.whatsapp.com/I2lDDGTGJVKEexKVmnX7iw");
     expect(link.getAttribute("target")).toBe("_blank");
-    expect(link.getAttribute("rel")).toBe("noopener noreferrer");
-  });
-
-  it("começa em participar e troca pra patrocinar pelo botão", () => {
-    render(<Interesse numero="5543000000000" dataLabel="12/10" />);
-    expect(screen.getByPlaceholderText("Cidade")).toBeTruthy();
-    expect(screen.queryByPlaceholderText("Empresa")).toBeNull();
-
+    expect(document.querySelector("form")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "Quero patrocinar" }));
-
-    expect(screen.getByPlaceholderText("Empresa")).toBeTruthy();
-    expect(screen.queryByPlaceholderText("Cidade")).toBeNull();
+    expect(screen.getByLabelText("Empresa")).toBeTruthy();
   });
 
-  it("abre em patrocinar quando a URL tem #patrocinar", () => {
+  it("abre o formulário de patrocínio pelo hash e mantém acesso direto ao grupo", () => {
     window.location.hash = "#patrocinar";
-    render(<Interesse numero="5543000000000" dataLabel="12/10" />);
-    expect(screen.getByPlaceholderText("Empresa")).toBeTruthy();
+    render(<Interesse />);
+    expect(screen.getByLabelText("Empresa")).toBeTruthy();
+    expect(screen.getByRole("link", { name: "Entrar no grupo" }).getAttribute("href")).toContain("chat.whatsapp.com");
   });
 
-  it("troca de modo quando um CTA de intenção é clicado na mesma página", () => {
-    render(
-      <>
-        <IntentLink href="/evento#patrocinar" intent="patrocinar">
-          Patrocinar
-        </IntentLink>
-        <IntentLink href="/evento#interesse" intent="participar">
-          Garantir vaga
-        </IntentLink>
-        <Interesse numero="5543000000000" dataLabel="12/10" />
-      </>,
-    );
-    fireEvent.click(screen.getByRole("link", { name: "Quero participar" }));
+  it("abre o formulário ao clicar em Patrocinar na mesma página", () => {
+    render(<><IntentLink href="/evento#patrocinar" intent="patrocinar">Patrocinar</IntentLink><Interesse /></>);
     fireEvent.click(screen.getByRole("link", { name: "Patrocinar" }));
-    expect(screen.getByPlaceholderText("Empresa")).toBeTruthy();
-
-    fireEvent.click(screen.getByRole("link", { name: "Garantir vaga" }));
-    expect(screen.getByPlaceholderText("Cidade")).toBeTruthy();
+    expect(screen.getByLabelText("Empresa")).toBeTruthy();
   });
 
-  it("envia a mensagem de patrocínio pro WhatsApp", () => {
-    const open = vi.spyOn(window, "open").mockReturnValue(null);
-    render(<Interesse numero="5543000000000" dataLabel="12/10" />);
-    fireEvent.click(screen.getByRole("button", { name: "Quero patrocinar" }));
-    preencher({ nome: "Ana", empresa: "Decol", whatsapp: "43999990000", mensagem: "Cotas?" });
-
+  it("aguarda o salvamento antes de confirmar o envio", async () => {
+    let concluir!: (valor: Response) => void;
+    const fetch = vi.fn().mockImplementation(() => new Promise<Response>((resolve) => { concluir = resolve; }));
+    vi.stubGlobal("fetch", fetch);
+    window.location.hash = "#patrocinar";
+    render(<Interesse />);
+    preencher();
     fireEvent.submit(document.querySelector("form")!);
+    expect(screen.queryByRole("status")).toBeNull();
+    expect(screen.getByRole("button", { name: "Enviando…" }).hasAttribute("disabled")).toBe(true);
+    expect(fetch).toHaveBeenCalledWith("/api/patrocinios/", expect.objectContaining({ method: "POST" }));
+    expect(JSON.parse(fetch.mock.calls[0][1].body)).toMatchObject({ nome: "Ana", empresa: "Decol", whatsapp: "43999990000" });
+    await act(async () => { concluir(Response.json({ salvo: true }, { status: 201 })); });
+    expect(screen.getByRole("status").textContent).toContain("Recebemos seu pedido de patrocínio.");
+    expect(document.querySelector("form")).toBeNull();
+  });
 
-    const url = String(open.mock.calls[0][0]);
-    expect(url.startsWith("https://wa.me/5543000000000?text=")).toBe(true);
-    expect(decodeURIComponent(new URL(url).searchParams.get("text") ?? "")).toBe(
-      "Olá! Tenho interesse em patrocinar o Elevation 12/10. Nome: Ana | Empresa: Decol | WhatsApp: 43999990000 | Mensagem: Cotas?",
-    );
+  it("mantém os dados preenchidos se o armazenamento falha", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(Response.json({ erro: "Tente novamente." }, { status: 503 })));
+    window.location.hash = "#patrocinar";
+    render(<Interesse />);
+    preencher();
+    fireEvent.submit(document.querySelector("form")!);
+    await waitFor(() => expect(screen.getByRole("alert").textContent).toBe("Tente novamente."));
+    expect((screen.getByLabelText("Nome") as HTMLInputElement).value).toBe("Ana");
+    expect(screen.queryByRole("status")).toBeNull();
   });
 });

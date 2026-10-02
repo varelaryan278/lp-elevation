@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { IntentLink } from "@/components/ui/IntentLink";
 import { Monograma } from "@/components/ui/Monograma";
@@ -26,7 +27,7 @@ export const Footer = () => (
           E-mail
         </a>
       </nav>
-      <a href="/painel/" className="text-xs text-cream/50 hover:text-gold">Painel da organização</a>
+      <Link href="/painel/" prefetch={false} className="text-xs text-cream/50 hover:text-gold">Painel da organização</Link>
       <p className="font-sans text-xs text-cream/50">
         © {new Date().getFullYear()} {marca.nome}. {marca.assinatura}.
       </p>

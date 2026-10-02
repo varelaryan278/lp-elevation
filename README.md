@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Elevation
 
-## Getting Started
+Site do movimento Elevation em Next.js. Todos os convites de participação levam diretamente ao grupo do WhatsApp configurado em `content/marca.ts`, sem cadastro obrigatório. Os pedidos de patrocínio são salvos no Upstash Redis e consultados pela organização em `/painel/`.
 
-First, run the development server:
+O painel exibe os pedidos mais recentes primeiro, com data, nome, empresa, WhatsApp, mensagem, total recebido e paginação. Cada contato tem um link para responder pelo WhatsApp. Os registros indicam interesse em patrocinar; não representam membros do grupo nem confirmação de entrada no WhatsApp.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Configuração
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Instale as dependências com `pnpm install`.
+2. Copie `.env.example` para `.env.local`.
+3. Preencha `UPSTASH_REDIS_REST_URL` e `UPSTASH_REDIS_REST_TOKEN` com as credenciais REST de um banco Upstash Redis da organização. O token precisa permitir leitura, escrita e execução de scripts. Na Vercel, a integração Upstash pode provisionar essas variáveis pelo Marketplace.
+4. Configure `ADMIN_USERNAME` e `ADMIN_PASSWORD`. Use uma senha exclusiva de pelo menos 16 caracteres. Ao abrir `/painel/`, o navegador solicitará essas credenciais.
+5. Rode `pnpm dev` e abra `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+As variáveis de acesso são exclusivas do servidor. Não use o prefixo `NEXT_PUBLIC_` e não publique `.env.local`. Configure as mesmas variáveis no servidor de produção e use HTTPS. Use um banco separado para testes e previews.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Sem credenciais Redis, o formulário informa indisponibilidade e não confirma o envio. Sem credenciais administrativas válidas, o painel permanece bloqueado. O grupo continua acessível independentemente do Redis.
 
-## Learn More
+## Fluxos
 
-To learn more about Next.js, take a look at the following resources:
+- Grupo: os botões do topo, menu mobile, página inicial, página do evento e rodapé abrem o convite em nova aba.
+- Patrocínio: ao clicar em “Patrocinar”, o formulário solicita nome, empresa, WhatsApp com DDD e mensagem. O servidor valida e normaliza os dados, grava no Redis e só então confirma o recebimento. Se houver falha, os campos ficam preenchidos para tentar novamente.
+- Painel: acesso privado por autenticação HTTP Basic, sem cache e com uma segunda verificação de autorização antes de ler os dados. O painel não aparece no sitemap.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Os pedidos são armazenados na lista `elevation:patrocinios`. Um script Redis impede pedidos idênticos por 24 horas e limita novos envios por origem durante uma hora. Na Vercel, a origem usa o IP encaminhado pela plataforma; em outros servidores o limite é compartilhado (20 pedidos/hora). Os dados dos pedidos permanecem no banco; somente as chaves de controle expiram.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+A integração usa a [API REST oficial do Upstash](https://upstash.com/docs/redis/features/restapi) com `fetch` no servidor. As operações de salvamento e controle são executadas juntas via `EVAL`.
 
-## Deploy on Vercel
+## Verificação e produção
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `pnpm lint`
+- `pnpm test`
+- `pnpm build`
+- `pnpm start`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+O projeto requer uma hospedagem com servidor Next.js, como a Vercel ou Node.js. A exportação estática foi removida para permitir a API e o painel privado. O build usa fontes do Google e precisa conseguir acessar `fonts.googleapis.com` e `fonts.gstatic.com`.

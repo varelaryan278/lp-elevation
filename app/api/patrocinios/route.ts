@@ -14,9 +14,21 @@ export const POST = async (request: Request) => {
   }
   let entrada: unknown;
   try {
-    const corpo = await request.text();
-    if (corpo.length > 8000) return Response.json({ erro: "Mensagem muito longa." }, { status: 413, headers });
-    entrada = JSON.parse(corpo);
+    const leitor = request.body?.getReader();
+    if (!leitor) return Response.json({ erro: "Dados inválidos." }, { status: 400, headers });
+    const partes: Uint8Array[] = [];
+    let tamanho = 0;
+    while (true) {
+      const { done, value } = await leitor.read();
+      if (done) break;
+      tamanho += value.byteLength;
+      if (tamanho > 8000) {
+        await leitor.cancel();
+        return Response.json({ erro: "Mensagem muito longa." }, { status: 413, headers });
+      }
+      partes.push(value);
+    }
+    entrada = JSON.parse(Buffer.concat(partes).toString("utf8"));
   } catch {
     return Response.json({ erro: "Dados inválidos." }, { status: 400, headers });
   }

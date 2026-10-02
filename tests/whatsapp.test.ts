@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildMensagem, buildMensagemPatrocinio, buildWhatsAppUrl } from "@/lib/whatsapp";
+import { buildMensagemPatrocinio, buildWhatsAppUrl } from "@/lib/whatsapp";
 
 describe("buildMensagemPatrocinio", () => {
   it("monta a mensagem de patrocínio com empresa e recado", () => {
@@ -9,18 +9,6 @@ describe("buildMensagemPatrocinio", () => {
     );
     expect(msg).toBe(
       "Olá! Tenho interesse em patrocinar o Elevation 12/10. Nome: Ana Paula | Empresa: Decol Design | WhatsApp: 43999990000 | Mensagem: Quero saber as cotas.",
-    );
-  });
-});
-
-describe("buildMensagem", () => {
-  it("monta a mensagem no formato combinado", () => {
-    const msg = buildMensagem(
-      { nome: "Ana Paula", whatsapp: "43999990000", cidade: "Londrina", origem: "Instagram" },
-      "12/10",
-    );
-    expect(msg).toBe(
-      "Olá! Quero garantir minha vaga no Elevation 12/10. Nome: Ana Paula | WhatsApp: 43999990000 | Cidade: Londrina | Conheci por: Instagram",
     );
   });
 });
