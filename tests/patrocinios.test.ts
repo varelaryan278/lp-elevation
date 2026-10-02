@@ -86,20 +86,20 @@ describe("patrocínios", () => {
 });
 
 describe("acesso ao painel", () => {
-  it("mantém o painel fechado sem configuração ou com senha incorreta", () => {
-    vi.stubEnv("ADMIN_USERNAME", "admin"); vi.stubEnv("ADMIN_PASSWORD", "");
+  it("mantém o painel fechado sem configuração ou com token incorreto", () => {
+    vi.stubEnv("ADMIN_TOKEN", "");
     expect(autenticarAdmin(null)).toBe(false);
     expect(proxy(new NextRequest("https://elevation.com.br/painel/" )).status).toBe(503);
-    vi.stubEnv("ADMIN_PASSWORD", "senha-longa-de-teste");
-    expect(autenticarAdmin(`Basic ${Buffer.from("admin:errada").toString("base64")}`)).toBe(false);
-    const resposta = proxy(new NextRequest("https://elevation.com.br/painel/"));
+    vi.stubEnv("ADMIN_TOKEN", "token-administrativo-exclusivo-de-teste");
+    expect(autenticarAdmin("Bearer incorreto")).toBe(false);
+    const resposta = proxy(new NextRequest("https://elevation.com.br/painel/", { headers: { authorization: "Bearer incorreto" } }));
     expect(resposta.status).toBe(401);
-    expect(resposta.headers.get("www-authenticate")).toContain("Basic");
+    expect(resposta.headers.get("www-authenticate")).toContain("Bearer");
   });
 
   it("permite apenas a credencial configurada e desativa cache", () => {
-    vi.stubEnv("ADMIN_USERNAME", "admin"); vi.stubEnv("ADMIN_PASSWORD", "senha-longa-de-teste");
-    const authorization = `Basic ${Buffer.from("admin:senha-longa-de-teste").toString("base64")}`;
+    vi.stubEnv("ADMIN_TOKEN", "token-administrativo-exclusivo-de-teste");
+    const authorization = "Bearer token-administrativo-exclusivo-de-teste";
     expect(autenticarAdmin(authorization)).toBe(true);
     const resposta = proxy(new NextRequest("https://elevation.com.br/painel/", { headers: { authorization } }));
     expect(resposta.status).toBe(200);

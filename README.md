@@ -9,7 +9,7 @@ O painel exibe os pedidos mais recentes primeiro, com data, nome, empresa, Whats
 1. Instale as dependências com `pnpm install`.
 2. Copie `.env.example` para `.env.local`.
 3. Preencha `UPSTASH_REDIS_REST_URL` e `UPSTASH_REDIS_REST_TOKEN` com as credenciais REST de um banco Upstash Redis da organização. O token precisa permitir leitura, escrita e execução de scripts. Na Vercel, a integração Upstash pode provisionar essas variáveis pelo Marketplace.
-4. Configure `ADMIN_USERNAME` e `ADMIN_PASSWORD`. Use uma senha exclusiva de pelo menos 16 caracteres. Ao abrir `/painel/`, o navegador solicitará essas credenciais.
+4. Configure `ADMIN_TOKEN` com um token exclusivo de pelo menos 32 caracteres. Ao abrir `/painel/`, informe esse token na tela de acesso. Gere um token com `node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"`.
 5. Rode `pnpm dev` e abra `http://localhost:3000`.
 
 As variáveis de acesso são exclusivas do servidor. Não use o prefixo `NEXT_PUBLIC_` e não publique `.env.local`. Configure as mesmas variáveis no servidor de produção e use HTTPS. Use um banco separado para testes e previews.
@@ -20,7 +20,7 @@ Sem credenciais Redis, o formulário informa indisponibilidade e não confirma o
 
 - Grupo: os botões do topo, menu mobile, página inicial, página do evento e rodapé abrem o convite em nova aba.
 - Patrocínio: ao clicar em “Patrocinar”, o formulário solicita nome, empresa, WhatsApp com DDD e mensagem. O servidor valida e normaliza os dados, grava no Redis e só então confirma o recebimento. Se houver falha, os campos ficam preenchidos para tentar novamente.
-- Painel: acesso privado por autenticação HTTP Basic, sem cache e com uma segunda verificação de autorização antes de ler os dados. O painel não aparece no sitemap.
+- Painel: acesso por token em `/painel/acesso/`, com sessão assinada de 8 horas em cookie HttpOnly, SameSite Strict e Secure em produção. O token não aparece na URL e não é salvo em localStorage. O botão “Sair” encerra a sessão no navegador. Também é possível autenticar requisições com `Authorization: Bearer <ADMIN_TOKEN>`. O servidor verifica novamente a autorização antes de ler dados, desativa o cache e exclui o painel do sitemap. Alterar `ADMIN_TOKEN` invalida todas as sessões existentes.
 
 Os pedidos são armazenados na lista `elevation:patrocinios`. Um script Redis impede pedidos idênticos por 24 horas e limita novos envios por origem durante uma hora. Na Vercel, a origem usa o IP encaminhado pela plataforma; em outros servidores o limite é compartilhado (20 pedidos/hora). Os dados dos pedidos permanecem no banco; somente as chaves de controle expiram.
 

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { autenticarAdmin } from "@/lib/admin-auth";
+import { autenticarAdmin, cookieAdmin } from "@/lib/admin-auth";
 import { listarPatrocinios, redisConfigurado } from "@/lib/redis";
 import type { PedidoPatrocinio } from "@/lib/patrocinios";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
@@ -16,7 +16,7 @@ const data = (valor: string) => new Intl.DateTimeFormat("pt-BR", {
 }).format(new Date(valor));
 
 export default async function Painel({ searchParams }: { searchParams: Promise<{ pagina?: string }> }) {
-  if (!autenticarAdmin((await headers()).get("authorization"))) notFound();
+  if (!autenticarAdmin((await headers()).get("authorization"), (await cookies()).get(cookieAdmin)?.value)) notFound();
   const parametros = await searchParams;
   const numero = Number(parametros.pagina ?? 1);
   const pagina = Number.isSafeInteger(numero) && numero > 0 && numero <= 100000 ? numero : 1;
@@ -42,9 +42,14 @@ export default async function Painel({ searchParams }: { searchParams: Promise<{
           <h1 className="font-serif text-4xl text-cream md:text-5xl">Pedidos de patrocínio</h1>
           <p className="mt-4 text-sm text-cream/70">Acompanhe as empresas interessadas e continue a conversa pelo WhatsApp.</p>
         </div>
-        <form action="/painel/" method="get">
-          <button type="submit" className="border border-gold px-6 py-3 text-sm text-gold hover:bg-gold hover:text-ink">Atualizar pedidos</button>
-        </form>
+        <div className="flex flex-wrap gap-3">
+          <form action="/painel/" method="get">
+            <button type="submit" className="border border-gold px-6 py-3 text-sm text-gold hover:bg-gold hover:text-ink">Atualizar pedidos</button>
+          </form>
+          <form action="/api/admin/sair/" method="post">
+            <button type="submit" className="border border-cream/30 px-6 py-3 text-sm text-cream/70 hover:text-gold">Sair</button>
+          </form>
+        </div>
       </div>
       {erro ? <p role="alert" className="mt-12 border border-gold/40 p-6 text-cream">{erro}</p> : (
         <>

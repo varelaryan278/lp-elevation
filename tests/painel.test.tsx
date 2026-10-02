@@ -1,19 +1,19 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { notFound } from "next/navigation";
 import Painel from "@/app/painel/page";
 import { listarPatrocinios, redisConfigurado } from "@/lib/redis";
 
-vi.mock("next/headers", () => ({ headers: vi.fn() }));
+vi.mock("next/headers", () => ({ headers: vi.fn(), cookies: vi.fn() }));
 vi.mock("next/navigation", () => ({ notFound: vi.fn(() => { throw new Error("Acesso negado"); }) }));
 vi.mock("@/lib/redis", () => ({ listarPatrocinios: vi.fn(), redisConfigurado: vi.fn() }));
 
 beforeEach(() => {
-  vi.stubEnv("ADMIN_USERNAME", "admin");
-  vi.stubEnv("ADMIN_PASSWORD", "senha-longa-de-teste");
-  const autorizacao = `Basic ${Buffer.from("admin:senha-longa-de-teste").toString("base64")}`;
+  vi.stubEnv("ADMIN_TOKEN", "token-administrativo-exclusivo-de-teste");
+  const autorizacao = "Bearer token-administrativo-exclusivo-de-teste";
   vi.mocked(headers).mockResolvedValue(new Headers({ authorization: autorizacao }) as Awaited<ReturnType<typeof headers>>);
+  vi.mocked(cookies).mockResolvedValue({ get: () => undefined } as unknown as Awaited<ReturnType<typeof cookies>>);
   vi.mocked(redisConfigurado).mockReturnValue(true);
 });
 afterEach(() => { vi.clearAllMocks(); vi.unstubAllEnvs(); });
