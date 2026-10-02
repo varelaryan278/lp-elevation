@@ -22,6 +22,9 @@ export const Footer = () => (
         <a href={`https://wa.me/${marca.whatsapp}`} target="_blank" rel="noopener" className="hover:text-gold">
           WhatsApp
         </a>
+        <a href={marca.grupoWhatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-gold">
+          Grupo do WhatsApp
+        </a>
         <a href={`mailto:${marca.email}`} className="hover:text-gold">
           E-mail
         </a>

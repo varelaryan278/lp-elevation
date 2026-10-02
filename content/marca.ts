@@ -62,4 +62,5 @@ export const marca = {
   instagram: "https://instagram.com/elevation",
   email: "contato@elevation.com.br",
   whatsapp: "5543000000000",
+  grupoWhatsapp: "https://chat.whatsapp.com/I2lDDGTGJVKEexKVmnX7iw",
 };
