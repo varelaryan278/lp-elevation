@@ -107,4 +107,29 @@ describe("MetaPixel", () => {
     link.addEventListener("click", (event) => event.preventDefault());
     expect(() => fireEvent.click(link)).not.toThrow();
   });
+
+  it("usa fetch com keepalive se o navegador recusar o beacon e compartilha o mesmo ID com o Pixel", () => {
+    vi.stubGlobal("navigator", { sendBeacon: vi.fn().mockReturnValue(false) });
+    const fetch = vi.fn().mockResolvedValue(new Response(null, { status: 202 }));
+    vi.stubGlobal("fetch", fetch);
+    const fbq = vi.fn();
+    window.fbq = fbq;
+    render(<MetaPixel />);
+    expect(fetch).toHaveBeenCalledWith("/api/meta/events/", expect.objectContaining({ keepalive: true, method: "POST" }));
+    const body = JSON.parse(fetch.mock.calls[0][1].body);
+    expect(body).toMatchObject({ eventName: "PageView", eventId: fbq.mock.calls[0][3].eventID });
+    expect(body).not.toHaveProperty("access_token");
+  });
+
+  it("exclui o painel e volta a registrar visitas ao retornar às páginas públicas", () => {
+    window.fbq = vi.fn();
+    const { rerender } = render(<MetaPixel />);
+    router.pathname = "/painel/";
+    rerender(<MetaPixel />);
+    expect(document.getElementById("meta-pixel")).toBeNull();
+    expect(navigator.sendBeacon).toHaveBeenCalledTimes(1);
+    router.pathname = "/";
+    rerender(<MetaPixel />);
+    expect(navigator.sendBeacon).toHaveBeenCalledTimes(2);
+  });
 });

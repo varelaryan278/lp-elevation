@@ -1,8 +1,33 @@
 import { isIP } from "node:net";
+import { createHash } from "node:crypto";
 import { META_PIXEL_ID, metaEvents, type MetaEventName } from "./meta-events";
+import { comandoRedis, redisConfigurado } from "./redis";
 
 export type MetaConversion = { eventName: MetaEventName; eventId: string; eventSourceUrl: string };
 export const metaConversionsConfigured = () => Boolean(process.env.META_CONVERSIONS_ACCESS_TOKEN);
+
+const clientIp = (request: Request) => {
+  const ip = process.env.VERCEL === "1" ? request.headers.get("x-vercel-forwarded-for")?.split(",")[0].trim() : undefined;
+  return ip && isIP(ip) ? ip : undefined;
+};
+
+export const allowMetaBrowserEvent = async (request: Request, event: MetaConversion) => {
+  if (!redisConfigurado()) return true;
+  const origin = createHash("sha256").update(clientIp(request) ?? "sem-ip").digest("hex");
+  try {
+    return await comandoRedis<number>([
+      "EVAL", `
+        local quantidade = redis.call('INCR', KEYS[1])
+        if quantidade == 1 then redis.call('EXPIRE', KEYS[1], 60) end
+        if quantidade > 120 then return 0 end
+        if redis.call('SET', KEYS[2], '1', 'EX', 86400, 'NX') then return 1 end
+        return 0
+      `, 2, `elevation:meta:limite:${origin}`, `elevation:meta:evento:${event.eventName}:${event.eventId}`,
+    ]) === 1;
+  } catch {
+    return false;
+  }
+};
 
 export const sendMetaConversion = async (request: Request, event: MetaConversion): Promise<boolean> => {
   const token = process.env.META_CONVERSIONS_ACCESS_TOKEN;
@@ -10,8 +35,8 @@ export const sendMetaConversion = async (request: Request, event: MetaConversion
   const userData: Record<string, string> = {};
   const agent = request.headers.get("user-agent");
   if (agent) userData.client_user_agent = agent.slice(0, 1024);
-  const ip = process.env.VERCEL === "1" ? request.headers.get("x-vercel-forwarded-for")?.split(",")[0].trim() : undefined;
-  if (ip && isIP(ip)) userData.client_ip_address = ip;
+  const ip = clientIp(request);
+  if (ip) userData.client_ip_address = ip;
   const cookies = request.headers.get("cookie") ?? "";
   for (const name of ["fbp", "fbc"]) {
     const value = cookies.split(";").map((part) => part.trim()).find((part) => part.startsWith(`_${name}=`))?.slice(name.length + 2);

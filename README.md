@@ -32,7 +32,9 @@ O Pixel `2593484331065033` registra `PageView` nas páginas públicas, `Contact`
 
 Configure `META_CONVERSIONS_ACCESS_TOKEN` em `.env.local` e nas variáveis privadas da hospedagem para enviar esses eventos também pela API de Conversões. O token nunca é enviado ao navegador. Para verificar recebimento na Meta sem registrar conversões reais, configure `META_CONVERSIONS_TEST_EVENT_CODE` com o código fornecido na opção “Testar eventos” do Gerenciador de Eventos; remova-o após a verificação.
 
-Os eventos do navegador e do servidor usam o mesmo `event_id` para deduplicação. O endpoint público aceita somente visitas, cliques no grupo e interesse em patrocínio; leads são gerados pelo servidor após salvar o formulário. O envio usa cookies `_fbp`/`_fbc`, agente do navegador e IP encaminhado pela Vercel quando disponíveis. Não envia nome, telefone, empresa nem mensagem. Falhas da Meta não bloqueiam o formulário nem a abertura do grupo.
+Os eventos do navegador e do servidor usam o mesmo `event_id` para deduplicação. O endpoint público aceita somente visitas, cliques no grupo e interesse em patrocínio; leads são gerados pelo servidor após salvar um novo pedido. O envio usa cookies `_fbp`/`_fbc`, agente do navegador e IP encaminhado pela Vercel quando disponíveis. Não envia nome, telefone, empresa nem mensagem. Falhas da Meta não bloqueiam o formulário nem a abertura do grupo. O painel administrativo fica fora do rastreamento.
+
+Quando Redis está configurado, o endpoint limita eventos do navegador a 120 por minuto por origem e ignora IDs já enviados por 24 horas. Sem IP confiável, a origem é compartilhada. Sem Redis, os eventos continuam sendo enviados, sem esse controle adicional.
 
 Referências: [eventos e deduplicação no SDK oficial da Meta](https://github.com/facebook/facebook-nodejs-business-sdk/blob/main/src/objects/serverside/server-event.js), [requisição e código de teste](https://github.com/facebook/facebook-nodejs-business-sdk/blob/main/src/objects/serverside/event-request.js).
 

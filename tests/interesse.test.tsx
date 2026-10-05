@@ -91,4 +91,16 @@ describe("Interesse", () => {
     expect(screen.queryByRole("status")).toBeNull();
     expect(fbq).not.toHaveBeenCalled();
   });
+
+  it("confirma um pedido duplicado sem registrar outro lead", async () => {
+    const fbq = vi.fn();
+    window.fbq = fbq;
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(Response.json({ salvo: true }, { status: 201 })));
+    window.location.hash = "#patrocinar";
+    render(<Interesse />);
+    preencher();
+    fireEvent.submit(document.querySelector("form")!);
+    await waitFor(() => expect(screen.getByRole("status")).toBeTruthy());
+    expect(fbq).not.toHaveBeenCalled();
+  });
 });

@@ -12,7 +12,11 @@ export const MetaPixel = () => {
   const lastPageView = useRef<string | null>(null);
 
   const trackPageView = useCallback(() => {
-    if (!isPublicPath(pathname) || lastPageView.current === pathname) return;
+    if (!isPublicPath(pathname)) {
+      lastPageView.current = null;
+      return;
+    }
+    if (lastPageView.current === pathname) return;
     trackMetaEvent("PageView");
     lastPageView.current = pathname;
   }, [pathname]);
@@ -35,6 +39,8 @@ export const MetaPixel = () => {
     document.addEventListener("click", trackLink, true);
     return () => document.removeEventListener("click", trackLink, true);
   }, []);
+
+  if (!isPublicPath(pathname)) return null;
 
   return (
     <>

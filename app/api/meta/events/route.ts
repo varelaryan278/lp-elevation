@@ -1,6 +1,6 @@
 import { after } from "next/server";
 import { isPublicPath, type BrowserMetaEventName } from "@/lib/meta-events";
-import { metaConversionsConfigured, sendMetaConversion } from "@/lib/meta-conversions";
+import { allowMetaBrowserEvent, metaConversionsConfigured, sendMetaConversion } from "@/lib/meta-conversions";
 
 export const runtime = "nodejs";
 
@@ -37,7 +37,9 @@ export const POST = async (request: Request) => {
       eventId: input.eventId,
       eventSourceUrl: `${source.origin}${source.pathname}`,
     };
-    if (metaConversionsConfigured()) after(() => sendMetaConversion(request, event).then(() => {}));
+    if (metaConversionsConfigured()) after(async () => {
+      if (await allowMetaBrowserEvent(request, event)) await sendMetaConversion(request, event);
+    });
   } catch {
     return new Response(null, { status: 400, headers });
   }
