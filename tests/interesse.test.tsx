@@ -1,14 +1,19 @@
 // @vitest-environment jsdom
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Interesse } from "@/components/evento/Interesse";
 import { IntentLink } from "@/components/ui/IntentLink";
 import { setIntent } from "@/lib/intent";
+import { flushPixelEvents } from "@/lib/meta-pixel";
+
+beforeEach(() => { vi.stubGlobal("navigator", { sendBeacon: vi.fn().mockReturnValue(true) }); });
 
 afterEach(() => {
   cleanup();
   window.location.hash = "";
   setIntent(null);
+  window.fbq = vi.fn();
+  flushPixelEvents();
   delete window.fbq;
   vi.unstubAllGlobals();
 });
@@ -26,7 +31,7 @@ describe("Interesse", () => {
     window.fbq = fbq;
     render(<Interesse />);
     fireEvent.click(screen.getByRole("button", { name: "Quero patrocinar" }));
-    expect(fbq.mock.calls).toEqual([["trackCustom", "InteressePatrocinio"]]);
+    expect(fbq.mock.calls).toEqual([["trackCustom", "InteressePatrocinio", {}, { eventID: expect.any(String) }]]);
   });
 
   it("abre o grupo diretamente sem pedir dados pessoais", () => {
@@ -67,10 +72,10 @@ describe("Interesse", () => {
     expect(screen.getByRole("button", { name: "Enviando…" }).hasAttribute("disabled")).toBe(true);
     expect(fetch).toHaveBeenCalledWith("/api/patrocinios/", expect.objectContaining({ method: "POST" }));
     expect(JSON.parse(fetch.mock.calls[0][1].body)).toMatchObject({ nome: "Ana", empresa: "Decol", whatsapp: "43999990000" });
-    await act(async () => { concluir(Response.json({ salvo: true }, { status: 201 })); });
+    await act(async () => { concluir(Response.json({ salvo: true, eventId: "6c322bab-3148-458b-9893-446b18d9526f" }, { status: 201 })); });
     expect(screen.getByRole("status").textContent).toContain("Recebemos seu pedido de patrocínio.");
     expect(document.querySelector("form")).toBeNull();
-    expect(fbq.mock.calls).toEqual([["track", "Lead", { content_name: "Patrocinio" }]]);
+    expect(fbq.mock.calls).toEqual([["track", "Lead", { content_name: "Patrocinio" }, { eventID: "6c322bab-3148-458b-9893-446b18d9526f" }]]);
   });
 
   it("mantém os dados preenchidos se o armazenamento falha", async () => {

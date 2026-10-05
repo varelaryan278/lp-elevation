@@ -42,7 +42,7 @@ export const salvarPatrocinio = async (dados: DadosPatrocinio, ip: string | null
     "EVAL", salvarScript, 3, chave, `${chave}:duplicado:${dedupe}`, `${chave}:limite:${origem}`,
     JSON.stringify(pedido), ip ? 5 : 20,
   ]);
-  return resultado >= 0;
+  return { salvo: resultado >= 0, novo: resultado === 1 };
 };
 
 export const listarPatrocinios = async (pagina: number, tamanho = 25) => {

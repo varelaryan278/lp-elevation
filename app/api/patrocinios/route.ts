@@ -40,9 +40,17 @@ export const POST = async (request: Request) => {
   try {
     const ip = process.env.VERCEL === "1" ? request.headers.get("x-vercel-forwarded-for") : null;
     const salvo = await salvarPatrocinio(dados, ip);
-    if (!salvo) return Response.json({ erro: "Muitos pedidos enviados. Tente novamente mais tarde." }, { status: 429, headers });
-    return Response.json({ salvo: true }, { status: 201, headers });
+    if (!salvo.salvo) return Response.json({ erro: "Muitos pedidos enviados. Tente novamente mais tarde." }, { status: 429, headers });
+    if (!salvo.novo) return Response.json({ salvo: true }, { status: 201, headers });
+    const eventId = randomUUID();
+    if (metaConversionsConfigured()) after(() => sendMetaConversion(request, {
+      eventName: "Lead", eventId, eventSourceUrl: new URL("/evento/", request.url).href,
+    }).then(() => {}));
+    return Response.json({ salvo: true, eventId }, { status: 201, headers });
   } catch {
     return Response.json({ erro: "Não foi possível salvar seu pedido. Tente novamente." }, { status: 503, headers });
   }
 };
+import { randomUUID } from "node:crypto";
+import { after } from "next/server";
+import { metaConversionsConfigured, sendMetaConversion } from "@/lib/meta-conversions";

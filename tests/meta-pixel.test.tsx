@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ScriptProps } from "next/script";
 import { MetaPixel } from "@/components/analytics/MetaPixel";
 import { marca } from "@/content/marca";
+import { flushPixelEvents } from "@/lib/meta-pixel";
 
 const router = vi.hoisted(() => ({ pathname: "/" }));
 const scriptState = vi.hoisted(() => ({ onReady: undefined as (() => void) | undefined }));
@@ -18,10 +19,16 @@ vi.mock("next/script", () => ({
   },
 }));
 
-beforeEach(() => { router.pathname = "/"; });
+beforeEach(() => {
+  router.pathname = "/";
+  vi.stubGlobal("navigator", { sendBeacon: vi.fn().mockReturnValue(true) });
+});
 afterEach(() => {
   cleanup();
+  window.fbq = vi.fn();
+  flushPixelEvents();
   delete window.fbq;
+  vi.unstubAllGlobals();
   document.querySelectorAll('script[src*="connect.facebook.net"]').forEach((script) => script.remove());
 });
 
@@ -37,7 +44,7 @@ describe("MetaPixel", () => {
     const fbq = window.fbq as typeof window.fbq & { queue: IArguments[] };
     expect(fbq.queue.map((call) => Array.from(call))).toEqual([
       ["init", "2593484331065033"],
-      ["track", "PageView"],
+      ["track", "PageView", {}, { eventID: expect.any(String) }],
     ]);
     expect(document.querySelector('script[src="https://connect.facebook.net/en_US/fbevents.js"]')).toBeTruthy();
   });
@@ -60,7 +67,7 @@ describe("MetaPixel", () => {
     router.pathname = "/";
     rerender(<StrictMode><MetaPixel /></StrictMode>);
     expect(fbq).toHaveBeenCalledTimes(3);
-    expect(fbq.mock.calls).toEqual(Array(3).fill(["track", "PageView"]));
+    expect(fbq.mock.calls).toEqual(Array(3).fill(["track", "PageView", {}, { eventID: expect.any(String) }]));
   });
 
   it("distingue os cliques no grupo e no patrocínio, inclusive em elementos dentro do link", () => {
@@ -81,8 +88,8 @@ describe("MetaPixel", () => {
       fireEvent.click(target);
     }
     expect(fbq.mock.calls).toEqual([
-      ["track", "Contact", { content_name: "Grupo WhatsApp" }],
-      ["trackCustom", "InteressePatrocinio"],
+      ["track", "Contact", { content_name: "Grupo WhatsApp" }, { eventID: expect.any(String) }],
+      ["trackCustom", "InteressePatrocinio", {}, { eventID: expect.any(String) }],
     ]);
     unmount();
     const link = document.createElement("a");

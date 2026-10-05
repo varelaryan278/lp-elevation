@@ -26,6 +26,16 @@ Os pedidos são armazenados na lista `elevation:patrocinios`. Um script Redis im
 
 A integração usa a [API REST oficial do Upstash](https://upstash.com/docs/redis/features/restapi) com `fetch` no servidor. As operações de salvamento e controle são executadas juntas via `EVAL`.
 
+## Meta Pixel e API de Conversões
+
+O Pixel `2593484331065033` registra `PageView` nas páginas públicas, `Contact` nos cliques do convite do grupo, `InteressePatrocinio` ao abrir o formulário e `Lead` depois de salvar o pedido. O clique no convite indica intenção; não confirma entrada no grupo.
+
+Configure `META_CONVERSIONS_ACCESS_TOKEN` em `.env.local` e nas variáveis privadas da hospedagem para enviar esses eventos também pela API de Conversões. O token nunca é enviado ao navegador. Para verificar recebimento na Meta sem registrar conversões reais, configure `META_CONVERSIONS_TEST_EVENT_CODE` com o código fornecido na opção “Testar eventos” do Gerenciador de Eventos; remova-o após a verificação.
+
+Os eventos do navegador e do servidor usam o mesmo `event_id` para deduplicação. O endpoint público aceita somente visitas, cliques no grupo e interesse em patrocínio; leads são gerados pelo servidor após salvar o formulário. O envio usa cookies `_fbp`/`_fbc`, agente do navegador e IP encaminhado pela Vercel quando disponíveis. Não envia nome, telefone, empresa nem mensagem. Falhas da Meta não bloqueiam o formulário nem a abertura do grupo.
+
+Referências: [eventos e deduplicação no SDK oficial da Meta](https://github.com/facebook/facebook-nodejs-business-sdk/blob/main/src/objects/serverside/server-event.js), [requisição e código de teste](https://github.com/facebook/facebook-nodejs-business-sdk/blob/main/src/objects/serverside/event-request.js).
+
 ## Verificação e produção
 
 - `pnpm lint`

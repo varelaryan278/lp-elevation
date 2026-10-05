@@ -48,7 +48,7 @@ describe("patrocínios", () => {
     const fetch = vi.fn().mockResolvedValue(Response.json({ result: 1 })); vi.stubGlobal("fetch", fetch);
     const resposta = await POST(request());
     expect(resposta.status).toBe(201);
-    expect(await resposta.json()).toEqual({ salvo: true });
+    expect(await resposta.json()).toEqual({ salvo: true, eventId: expect.any(String) });
     const comando = JSON.parse(fetch.mock.calls[0][1].body);
     expect(comando[0]).toBe("EVAL");
     const pedido = JSON.parse(comando[6]);

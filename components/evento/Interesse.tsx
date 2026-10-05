@@ -36,11 +36,11 @@ export const Interesse = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(Object.fromEntries(dados)),
       });
-      const resultado = await resposta.json() as { salvo?: boolean; erro?: string };
+      const resultado = await resposta.json() as { salvo?: boolean; erro?: string; eventId?: string };
       if (!resposta.ok || !resultado.salvo) throw new Error(resultado.erro ?? "Não foi possível enviar seu pedido.");
       formulario.reset();
       setEnviado(true);
-      trackSponsorLead();
+      if (resultado.eventId) trackSponsorLead(resultado.eventId);
     } catch (error) {
       setErro(error instanceof Error ? error.message : "Não foi possível enviar seu pedido. Tente novamente.");
     } finally {

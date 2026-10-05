@@ -4,15 +4,16 @@ import Script from "next/script";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
 import { marca } from "@/content/marca";
-import { META_PIXEL_ID, trackSponsorInterest } from "@/lib/meta-pixel";
+import { META_PIXEL_ID, flushPixelEvents, trackMetaEvent, trackSponsorInterest } from "@/lib/meta-pixel";
+import { isPublicPath } from "@/lib/meta-events";
 
 export const MetaPixel = () => {
   const pathname = usePathname();
   const lastPageView = useRef<string | null>(null);
 
   const trackPageView = useCallback(() => {
-    if (!window.fbq || lastPageView.current === pathname) return;
-    window.fbq("track", "PageView");
+    if (!isPublicPath(pathname) || lastPageView.current === pathname) return;
+    trackMetaEvent("PageView");
     lastPageView.current = pathname;
   }, [pathname]);
 
@@ -25,7 +26,7 @@ export const MetaPixel = () => {
       if (!link) return;
 
       if (link.href === marca.grupoWhatsapp) {
-        window.fbq?.("track", "Contact", { content_name: "Grupo WhatsApp" });
+        trackMetaEvent("Contact");
       } else if (link.pathname.replace(/\/$/, "") === "/evento" && link.hash === "#patrocinar") {
         trackSponsorInterest();
       }
@@ -37,7 +38,7 @@ export const MetaPixel = () => {
 
   return (
     <>
-      <Script id="meta-pixel" strategy="afterInteractive" onReady={trackPageView}>
+      <Script id="meta-pixel" strategy="afterInteractive" onReady={flushPixelEvents}>
         {`!function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};
