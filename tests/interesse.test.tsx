@@ -26,12 +26,13 @@ const preencher = () => {
 };
 
 describe("Interesse", () => {
-  it("registra interesse ao abrir o formulário de patrocínio", () => {
+  it("não registra lead ao apenas abrir o formulário de patrocínio", () => {
     const fbq = vi.fn();
     window.fbq = fbq;
     render(<Interesse />);
     fireEvent.click(screen.getByRole("button", { name: "Quero patrocinar" }));
-    expect(fbq.mock.calls).toEqual([["trackCustom", "InteressePatrocinio", {}, { eventID: expect.any(String) }]]);
+    expect(fbq).not.toHaveBeenCalled();
+    expect(navigator.sendBeacon).not.toHaveBeenCalled();
   });
 
   it("abre o grupo diretamente sem pedir dados pessoais", () => {

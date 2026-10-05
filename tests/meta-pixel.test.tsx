@@ -70,7 +70,7 @@ describe("MetaPixel", () => {
     expect(fbq.mock.calls).toEqual(Array(3).fill(["track", "PageView", {}, { eventID: expect.any(String) }]));
   });
 
-  it("distingue os cliques no grupo e no patrocínio, inclusive em elementos dentro do link", () => {
+  it("gera Lead somente ao clicar no grupo, inclusive em elementos dentro do link", () => {
     const fbq = vi.fn();
     window.fbq = fbq;
     const { getByText, unmount } = render(
@@ -88,8 +88,7 @@ describe("MetaPixel", () => {
       fireEvent.click(target);
     }
     expect(fbq.mock.calls).toEqual([
-      ["track", "Contact", { content_name: "Grupo WhatsApp" }, { eventID: expect.any(String) }],
-      ["trackCustom", "InteressePatrocinio", {}, { eventID: expect.any(String) }],
+      ["track", "Lead", { content_name: "Grupo WhatsApp" }, { eventID: expect.any(String) }],
     ]);
     unmount();
     const link = document.createElement("a");
@@ -98,7 +97,7 @@ describe("MetaPixel", () => {
     link.addEventListener("click", (event) => event.preventDefault());
     fireEvent.click(link);
     link.remove();
-    expect(fbq).toHaveBeenCalledTimes(2);
+    expect(fbq).toHaveBeenCalledTimes(1);
   });
 
   it("permite clicar quando o pixel está bloqueado ou ainda não carregou", () => {

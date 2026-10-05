@@ -22,7 +22,8 @@ const trackPixel = (event: MetaEventName, eventId: string) => {
     return;
   }
   try {
-    window.fbq(event === "InteressePatrocinio" ? "trackCustom" : "track", event, metaEvents[event], { eventID: eventId });
+    const definition = metaEvents[event];
+    window.fbq("track", definition.eventName, definition.parameters, { eventID: eventId });
   } catch {
     // Analytics must not interrupt navigation or form interactions.
   }
@@ -50,5 +51,4 @@ export const trackMetaEvent = (eventName: BrowserMetaEventName) => {
   }
 };
 
-export const trackSponsorInterest = () => trackMetaEvent("InteressePatrocinio");
 export const trackSponsorLead = (eventId: string) => trackPixel("Lead", eventId);

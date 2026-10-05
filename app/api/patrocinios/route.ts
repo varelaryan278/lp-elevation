@@ -1,3 +1,6 @@
+import { randomUUID } from "node:crypto";
+import { after } from "next/server";
+import { metaConversionsConfigured, sendMetaConversion } from "@/lib/meta-conversions";
 import { validarPatrocinio } from "@/lib/patrocinios";
 import { redisConfigurado, salvarPatrocinio } from "@/lib/redis";
 
@@ -51,6 +54,3 @@ export const POST = async (request: Request) => {
     return Response.json({ erro: "Não foi possível salvar seu pedido. Tente novamente." }, { status: 503, headers });
   }
 };
-import { randomUUID } from "node:crypto";
-import { after } from "next/server";
-import { metaConversionsConfigured, sendMetaConversion } from "@/lib/meta-conversions";

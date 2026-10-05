@@ -27,7 +27,7 @@ export const POST = async (request: Request) => {
     }
     input = JSON.parse(Buffer.concat(parts).toString("utf8"));
     if (!input || typeof input !== "object" || Array.isArray(input)) throw new Error();
-    if (!["PageView", "Contact", "InteressePatrocinio"].includes(input.eventName as string)
+    if (!["PageView", "GroupLead"].includes(input.eventName as string)
       || typeof input.eventId !== "string" || !/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(input.eventId)
       || typeof input.eventSourceUrl !== "string") throw new Error();
     const source = new URL(input.eventSourceUrl);

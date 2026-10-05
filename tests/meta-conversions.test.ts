@@ -10,7 +10,7 @@ vi.mock("next/server", async (importOriginal) => ({
 }));
 
 const eventId = "6c322bab-3148-458b-9893-446b18d9526f";
-const event = { eventName: "Contact" as const, eventId, eventSourceUrl: "https://elevation.com.br/evento/" };
+const event = { eventName: "GroupLead" as const, eventId, eventSourceUrl: "https://elevation.com.br/evento/" };
 const request = (body: unknown = event, options: { origin?: string; type?: string } = {}) => new Request("https://elevation.com.br/api/meta/events/", {
   method: "POST",
   headers: {
@@ -45,7 +45,7 @@ describe("API de Conversões", () => {
     const body = JSON.parse(fetch.mock.calls[0][1].body);
     expect(body.access_token).toBe("private-meta-test-token");
     expect(body.data).toEqual([{
-      event_name: "Contact", event_id: eventId, event_time: expect.any(Number),
+      event_name: "Lead", event_id: eventId, event_time: expect.any(Number),
       action_source: "website", event_source_url: event.eventSourceUrl,
       user_data: {
         client_user_agent: "test-browser", client_ip_address: "203.0.113.12",
@@ -90,22 +90,25 @@ describe("API de Conversões", () => {
 });
 
 describe("endpoint de eventos do navegador", () => {
-  it("aceita os três eventos públicos e envia após responder, descartando consultas da URL", async () => {
+  it("envia visitas como PageView e cliques no grupo como Lead após responder", async () => {
     const fetch = vi.fn().mockResolvedValue(Response.json({ events_received: 1 }));
     vi.stubGlobal("fetch", fetch);
-    for (const eventName of ["PageView", "Contact", "InteressePatrocinio"]) {
+    for (const eventName of ["PageView", "GroupLead"]) {
       const response = await metaPOST(request({ ...event, eventName, eventSourceUrl: `${event.eventSourceUrl}?token=private#hash` }));
       expect(response.status).toBe(202);
       expect(response.headers.get("Cache-Control")).toBe("no-store");
     }
     expect(fetch).not.toHaveBeenCalled();
     await runBackground();
-    expect(fetch).toHaveBeenCalledTimes(3);
+    expect(fetch).toHaveBeenCalledTimes(2);
     expect(JSON.parse(fetch.mock.calls[0][1].body).data[0].event_source_url).toBe(event.eventSourceUrl);
+    expect(JSON.parse(fetch.mock.calls[0][1].body).data[0].event_name).toBe("PageView");
+    expect(JSON.parse(fetch.mock.calls[1][1].body).data[0]).toMatchObject({ event_name: "Lead", event_id: eventId, custom_data: { content_name: "Grupo WhatsApp" } });
   });
 
   it.each([
     null, [], { ...event, eventName: "Lead" }, { ...event, eventName: "Purchase" },
+    { ...event, eventName: "InteressePatrocinio" }, { ...event, eventName: "Contact" },
     { ...event, eventId: "invalid" }, { ...event, eventSourceUrl: "https://outro.com/" },
     { ...event, eventSourceUrl: "https://elevation.com.br/painel/" },
   ])("rejeita payload inválido %# sem agendar conversões", async (body) => {
@@ -129,7 +132,7 @@ describe("endpoint de eventos do navegador", () => {
     await runBackground();
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(fetch.mock.calls[0][0]).toBe("https://exemplo.upstash.io");
-    expect(JSON.parse(fetch.mock.calls[0][1].body)).toContain(`elevation:meta:evento:Contact:${eventId}`);
+    expect(JSON.parse(fetch.mock.calls[0][1].body)).toContain(`elevation:meta:evento:GroupLead:${eventId}`);
   });
 });
 

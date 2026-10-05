@@ -4,7 +4,7 @@ import Script from "next/script";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
 import { marca } from "@/content/marca";
-import { META_PIXEL_ID, flushPixelEvents, trackMetaEvent, trackSponsorInterest } from "@/lib/meta-pixel";
+import { META_PIXEL_ID, flushPixelEvents, trackMetaEvent } from "@/lib/meta-pixel";
 import { isPublicPath } from "@/lib/meta-events";
 
 export const MetaPixel = () => {
@@ -30,9 +30,7 @@ export const MetaPixel = () => {
       if (!link) return;
 
       if (link.href === marca.grupoWhatsapp) {
-        trackMetaEvent("Contact");
-      } else if (link.pathname.replace(/\/$/, "") === "/evento" && link.hash === "#patrocinar") {
-        trackSponsorInterest();
+        trackMetaEvent("GroupLead");
       }
     };
 

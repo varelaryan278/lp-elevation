@@ -43,13 +43,13 @@ export const sendMetaConversion = async (request: Request, event: MetaConversion
     if (value && value.length <= 512 && /^fb\.\d+\.\d+\.[A-Za-z0-9_-]+$/.test(value)) userData[name] = value;
   }
   const data = {
-    event_name: event.eventName,
+    event_name: metaEvents[event.eventName].eventName,
     event_id: event.eventId,
     event_time: Math.floor(Date.now() / 1000),
     action_source: "website",
     event_source_url: event.eventSourceUrl,
     user_data: userData,
-    custom_data: metaEvents[event.eventName],
+    custom_data: metaEvents[event.eventName].parameters,
   };
   try {
     const response = await fetch(`https://graph.facebook.com/v26.0/${META_PIXEL_ID}/events`, {

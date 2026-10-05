@@ -28,11 +28,11 @@ A integração usa a [API REST oficial do Upstash](https://upstash.com/docs/redi
 
 ## Meta Pixel e API de Conversões
 
-O Pixel `2593484331065033` registra `PageView` nas páginas públicas, `Contact` nos cliques do convite do grupo, `InteressePatrocinio` ao abrir o formulário e `Lead` depois de salvar o pedido. O clique no convite indica intenção; não confirma entrada no grupo.
+O Pixel `2593484331065033` registra `PageView` nas páginas públicas. O evento padrão `Lead` dispara somente ao clicar no convite do grupo ou após salvar um novo pedido de patrocínio. Os leads são diferenciados por `content_name`: `Grupo WhatsApp` e `Patrocinio`. Visitar uma página ou abrir o formulário não gera lead. O clique no convite indica intenção; não confirma entrada no grupo.
 
 Configure `META_CONVERSIONS_ACCESS_TOKEN` em `.env.local` e nas variáveis privadas da hospedagem para enviar esses eventos também pela API de Conversões. O token nunca é enviado ao navegador. Para verificar recebimento na Meta sem registrar conversões reais, configure `META_CONVERSIONS_TEST_EVENT_CODE` com o código fornecido na opção “Testar eventos” do Gerenciador de Eventos; remova-o após a verificação.
 
-Os eventos do navegador e do servidor usam o mesmo `event_id` para deduplicação. O endpoint público aceita somente visitas, cliques no grupo e interesse em patrocínio; leads são gerados pelo servidor após salvar um novo pedido. O envio usa cookies `_fbp`/`_fbc`, agente do navegador e IP encaminhado pela Vercel quando disponíveis. Não envia nome, telefone, empresa nem mensagem. Falhas da Meta não bloqueiam o formulário nem a abertura do grupo. O painel administrativo fica fora do rastreamento.
+Os eventos do navegador e do servidor usam o mesmo `event_id` para deduplicação. O endpoint público aceita somente visitas e cliques no grupo (identificados internamente como `GroupLead` e enviados à Meta como `Lead`); leads de patrocínio são gerados pelo servidor após salvar um novo pedido. O envio usa cookies `_fbp`/`_fbc`, agente do navegador e IP encaminhado pela Vercel quando disponíveis. Não envia nome, telefone, empresa nem mensagem. Falhas da Meta não bloqueiam o formulário nem a abertura do grupo. O painel administrativo fica fora do rastreamento.
 
 Quando Redis está configurado, o endpoint limita eventos do navegador a 120 por minuto por origem e ignora IDs já enviados por 24 horas. Sem IP confiável, a origem é compartilhada. Sem Redis, os eventos continuam sendo enviados, sem esse controle adicional.
 
