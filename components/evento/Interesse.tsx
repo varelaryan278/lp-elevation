@@ -6,6 +6,7 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Section } from "@/components/ui/Section";
 import { marca } from "@/content/marca";
 import { getIntent, getServerIntent, setIntent, subscribeIntent } from "@/lib/intent";
+import { trackSponsorInterest, trackSponsorLead } from "@/lib/meta-pixel";
 
 const campo =
   "w-full border-b border-cream/30 bg-transparent py-3 font-sans text-base text-cream outline-none transition-colors placeholder:text-cream/40 focus:border-gold";
@@ -39,6 +40,7 @@ export const Interesse = () => {
       if (!resposta.ok || !resultado.salvo) throw new Error(resultado.erro ?? "Não foi possível enviar seu pedido.");
       formulario.reset();
       setEnviado(true);
+      trackSponsorLead();
     } catch (error) {
       setErro(error instanceof Error ? error.message : "Não foi possível enviar seu pedido. Tente novamente.");
     } finally {
@@ -54,7 +56,10 @@ export const Interesse = () => {
           <a href={marca.grupoWhatsapp} target="_blank" rel="noopener noreferrer" className={aba(modo === "participar")}>
             Entrar no grupo
           </a>
-          <button type="button" className={aba(modo === "patrocinar")} onClick={() => setIntent("patrocinar")}>
+          <button type="button" className={aba(modo === "patrocinar")} onClick={() => {
+            setIntent("patrocinar");
+            trackSponsorInterest();
+          }}>
             Quero patrocinar
           </button>
         </div>

@@ -9,6 +9,7 @@ afterEach(() => {
   cleanup();
   window.location.hash = "";
   setIntent(null);
+  delete window.fbq;
   vi.unstubAllGlobals();
 });
 
@@ -20,6 +21,14 @@ const preencher = () => {
 };
 
 describe("Interesse", () => {
+  it("registra interesse ao abrir o formulário de patrocínio", () => {
+    const fbq = vi.fn();
+    window.fbq = fbq;
+    render(<Interesse />);
+    fireEvent.click(screen.getByRole("button", { name: "Quero patrocinar" }));
+    expect(fbq.mock.calls).toEqual([["trackCustom", "InteressePatrocinio"]]);
+  });
+
   it("abre o grupo diretamente sem pedir dados pessoais", () => {
     render(<Interesse />);
     const link = screen.getByRole("link", { name: "Entrar no grupo" });
@@ -44,6 +53,8 @@ describe("Interesse", () => {
   });
 
   it("aguarda o salvamento antes de confirmar o envio", async () => {
+    const fbq = vi.fn();
+    window.fbq = fbq;
     let concluir!: (valor: Response) => void;
     const fetch = vi.fn().mockImplementation(() => new Promise<Response>((resolve) => { concluir = resolve; }));
     vi.stubGlobal("fetch", fetch);
@@ -52,15 +63,19 @@ describe("Interesse", () => {
     preencher();
     fireEvent.submit(document.querySelector("form")!);
     expect(screen.queryByRole("status")).toBeNull();
+    expect(fbq).not.toHaveBeenCalled();
     expect(screen.getByRole("button", { name: "Enviando…" }).hasAttribute("disabled")).toBe(true);
     expect(fetch).toHaveBeenCalledWith("/api/patrocinios/", expect.objectContaining({ method: "POST" }));
     expect(JSON.parse(fetch.mock.calls[0][1].body)).toMatchObject({ nome: "Ana", empresa: "Decol", whatsapp: "43999990000" });
     await act(async () => { concluir(Response.json({ salvo: true }, { status: 201 })); });
     expect(screen.getByRole("status").textContent).toContain("Recebemos seu pedido de patrocínio.");
     expect(document.querySelector("form")).toBeNull();
+    expect(fbq.mock.calls).toEqual([["track", "Lead", { content_name: "Patrocinio" }]]);
   });
 
   it("mantém os dados preenchidos se o armazenamento falha", async () => {
+    const fbq = vi.fn();
+    window.fbq = fbq;
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(Response.json({ erro: "Tente novamente." }, { status: 503 })));
     window.location.hash = "#patrocinar";
     render(<Interesse />);
@@ -69,5 +84,6 @@ describe("Interesse", () => {
     await waitFor(() => expect(screen.getByRole("alert").textContent).toBe("Tente novamente."));
     expect((screen.getByLabelText("Nome") as HTMLInputElement).value).toBe("Ana");
     expect(screen.queryByRole("status")).toBeNull();
+    expect(fbq).not.toHaveBeenCalled();
   });
 });

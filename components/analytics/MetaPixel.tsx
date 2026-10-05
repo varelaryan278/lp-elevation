@@ -1,0 +1,64 @@
+"use client";
+
+import Script from "next/script";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useRef } from "react";
+import { marca } from "@/content/marca";
+import { META_PIXEL_ID, trackSponsorInterest } from "@/lib/meta-pixel";
+
+export const MetaPixel = () => {
+  const pathname = usePathname();
+  const lastPageView = useRef<string | null>(null);
+
+  const trackPageView = useCallback(() => {
+    if (!window.fbq || lastPageView.current === pathname) return;
+    window.fbq("track", "PageView");
+    lastPageView.current = pathname;
+  }, [pathname]);
+
+  useEffect(trackPageView, [trackPageView]);
+
+  useEffect(() => {
+    const trackLink = (event: MouseEvent) => {
+      if (!(event.target instanceof Element)) return;
+      const link = event.target.closest("a");
+      if (!link) return;
+
+      if (link.href === marca.grupoWhatsapp) {
+        window.fbq?.("track", "Contact", { content_name: "Grupo WhatsApp" });
+      } else if (link.pathname.replace(/\/$/, "") === "/evento" && link.hash === "#patrocinar") {
+        trackSponsorInterest();
+      }
+    };
+
+    document.addEventListener("click", trackLink, true);
+    return () => document.removeEventListener("click", trackLink, true);
+  }, []);
+
+  return (
+    <>
+      <Script id="meta-pixel" strategy="afterInteractive" onReady={trackPageView}>
+        {`!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '${META_PIXEL_ID}');`}
+      </Script>
+      <noscript>
+        {/* The tracking endpoint must use a native image without optimization. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          height="1"
+          width="1"
+          alt=""
+          style={{ display: "none" }}
+          src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
+        />
+      </noscript>
+    </>
+  );
+};

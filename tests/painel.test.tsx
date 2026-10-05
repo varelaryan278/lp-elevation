@@ -4,6 +4,7 @@ import { cookies, headers } from "next/headers";
 import { notFound } from "next/navigation";
 import Painel from "@/app/painel/page";
 import { listarPatrocinios, redisConfigurado } from "@/lib/redis";
+import { cookieAdmin, criarSessaoAdmin } from "@/lib/admin-auth";
 
 vi.mock("next/headers", () => ({ headers: vi.fn(), cookies: vi.fn() }));
 vi.mock("next/navigation", () => ({ notFound: vi.fn(() => { throw new Error("Acesso negado"); }) }));
@@ -38,6 +39,17 @@ describe("painel", () => {
     expect(html).toContain("https://wa.me/5543999990000?text=");
     expect(html).toMatch(/href="\/painel\/?\?pagina=2"/);
     expect(html).toContain("Página 1 de 2");
+  });
+
+  it("permite ler pedidos com a sessão criada pela tela de token", async () => {
+    vi.mocked(headers).mockResolvedValue(new Headers() as Awaited<ReturnType<typeof headers>>);
+    const sessao = criarSessaoAdmin();
+    vi.mocked(cookies).mockResolvedValue({ get: () => ({ name: cookieAdmin, value: sessao }) } as unknown as Awaited<ReturnType<typeof cookies>>);
+    vi.mocked(listarPatrocinios).mockResolvedValue({ total: 0, pedidos: [] });
+    const html = renderToStaticMarkup(await Painel({ searchParams: Promise.resolve({}) }));
+    expect(html).toContain("Pedidos de patrocínio");
+    expect(listarPatrocinios).toHaveBeenCalledWith(1);
+    expect(notFound).not.toHaveBeenCalled();
   });
 
   it("distingue banco vazio de falha de conexão", async () => {

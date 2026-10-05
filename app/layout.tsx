@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { MetaPixel } from "@/components/analytics/MetaPixel";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { sans, serif } from "./fonts";
@@ -26,6 +27,7 @@ const RootLayout = ({ children }: LayoutProps<"/">) => (
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
+      <MetaPixel />
     </body>
   </html>
 );
