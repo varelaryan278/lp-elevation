@@ -4,6 +4,10 @@ export type Pilar = { titulo: string; texto: string };
 
 export type BlocoProgramacao = { horario: string; titulo: string; descricao: string };
 
+export type LoteStatus = "disponivel" | "esgotado" | "em-breve";
+
+export type Lote = { nome: string; valor: string; status: LoteStatus; checkoutUrl: string };
+
 export type Evento = {
   edicao: number;
   dataIso: string;
@@ -14,6 +18,7 @@ export type Evento = {
   cidade: string;
   mapaUrl: string;
   programacao: BlocoProgramacao[];
+  lotes: Lote[];
 };
 
 export type Convidada = { nome: string; papel: string; bio: string; foto: string };
