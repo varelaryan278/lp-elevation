@@ -5,7 +5,7 @@ import { Interesse } from "@/components/evento/Interesse";
 import { Lotes } from "@/components/evento/Lotes";
 import { Programacao } from "@/components/evento/Programacao";
 import { convidadas } from "@/content/convidadas";
-import { evento } from "@/content/evento";
+import { evento, loteAtual } from "@/content/evento";
 import { marca } from "@/content/marca";
 
 export const metadata: Metadata = {
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 const EventoPage = () => (
   <>
-    <Detalhes evento={evento} />
+    <Detalhes evento={evento} loteAtual={loteAtual} />
     <Programacao blocos={evento.programacao} />
     <Convidadas convidadas={convidadas} />
     <Lotes lotes={evento.lotes} />

@@ -64,7 +64,12 @@ export const Interesse = () => {
         <h2 className="mt-6 font-serif text-4xl text-cream">{textos.titulo}</h2>
         <p className="mt-4 font-sans text-sm leading-relaxed text-cream/70">{textos.texto}</p>
         {modo === "participar" ? (
-          <Button href={marca.grupoWhatsapp} className="mt-12">Entrar no grupo do WhatsApp</Button>
+          <div className="mt-12 flex flex-col items-start gap-6 sm:flex-row sm:items-center">
+            <Button href={marca.grupoWhatsapp}>Entrar no grupo gratuito</Button>
+            <a href="#ingressos" className="font-sans text-xs uppercase tracking-[0.25em] text-gold underline-offset-4 hover:underline">
+              Ver ingressos
+            </a>
+          </div>
         ) : enviado ? (
           <div role="status" className="mt-12 border border-gold/40 p-8">
             <p className="font-serif text-2xl text-cream">Recebemos seu pedido de patrocínio.</p>

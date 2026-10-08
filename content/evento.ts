@@ -4,7 +4,7 @@ export const evento: Evento = {
   edicao: 2,
   dataIso: "2026-10-23",
   dataLabel: "23 de outubro",
-  horario: "A definir",
+  horario: "14h às 19h",
   local: "Royal Tennis",
   endereco: "Endereço a confirmar",
   cidade: "Londrina, PR",
@@ -21,3 +21,7 @@ export const evento: Evento = {
     { nome: "3º lote", valor: "R$ 157", status: "em-breve", checkoutUrl: "https://pay.kiwify.com.br/8eG09Qb" },
   ],
 };
+
+export const loteAtual = evento.lotes.find((l) => l.status === "disponivel");
+
+export const ingressosHref = "/evento#ingressos";

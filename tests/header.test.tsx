@@ -10,10 +10,10 @@ describe("Header", () => {
     expect(html).toContain("backdrop-blur");
   });
 
-  it("oferece entrada direta no grupo e patrocínio", () => {
+  it("prioriza o ingresso e mantém grupo e patrocínio", () => {
     const html = renderToStaticMarkup(<Header />);
+    expect(html).toMatch(/href="\/evento#ingressos"[^>]*>Garantir ingresso</);
     expect(html).toContain('href="https://chat.whatsapp.com/I2lDDGTGJVKEexKVmnX7iw"');
-    expect(html).not.toContain("Garantir vaga");
     expect(html).toContain('href="/evento#patrocinar"');
   });
 });

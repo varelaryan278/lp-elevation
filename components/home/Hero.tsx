@@ -2,6 +2,7 @@ import { preload } from "react-dom";
 import { Button } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Monograma } from "@/components/ui/Monograma";
+import { evento, ingressosHref } from "@/content/evento";
 import { marca, pilares } from "@/content/marca";
 
 const POSTER = "/img/hero/poster.webp";
@@ -29,9 +30,15 @@ export const Hero = () => {
         </h1>
         <p className="mt-4 font-serif text-xl italic text-gold md:text-2xl">{marca.assinatura}</p>
         <Eyebrow className="mt-10">{pilares.map((p) => p.titulo).join(" • ")}</Eyebrow>
-        <Button href={marca.grupoWhatsapp} className="mt-12">
-          Entrar no grupo
-        </Button>
+        <p className="mt-10 font-sans text-sm uppercase tracking-[0.25em] text-cream">
+          {evento.dataLabel} · {evento.local} · {evento.cidade}
+        </p>
+        <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <Button href={ingressosHref} className="w-full max-w-xs sm:w-auto">Garantir ingresso</Button>
+          <Button href={marca.grupoWhatsapp} variant="outline" className="w-full max-w-xs sm:w-auto">
+            Entrar no grupo
+          </Button>
+        </div>
       </div>
     </section>
   );

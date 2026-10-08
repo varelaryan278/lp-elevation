@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { IntentLink } from "@/components/ui/IntentLink";
 import { Monograma } from "@/components/ui/Monograma";
+import { ingressosHref } from "@/content/evento";
 import { marca, pilares } from "@/content/marca";
 
 export const Footer = () => (
@@ -11,6 +12,9 @@ export const Footer = () => (
       <Eyebrow>{pilares.map((p) => p.titulo).join(" • ")}</Eyebrow>
       <p className="font-serif text-xl italic text-cream">{marca.tagline}</p>
       <nav className="flex flex-wrap justify-center gap-8 font-sans text-xs uppercase tracking-[0.25em]">
+        <Link href={ingressosHref} className="text-gold hover:text-gold-light">
+          Ingressos
+        </Link>
         <a href={marca.grupoWhatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-gold">
           Entrar no grupo
         </a>
