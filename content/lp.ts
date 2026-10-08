@@ -1,6 +1,10 @@
+import { carol } from "./carol";
 import { loteAtual } from "./evento";
+import { marca } from "./marca";
 
 export type ConvidadaLp = { nome: string; sobrenome: string; papel?: string; foto?: string; destaque?: boolean };
+
+export type Anfitria = { nome: string; sobrenome: string; rotulo: string; bio: string; foto: string; frase?: string };
 
 export const compraHref = loteAtual?.checkoutUrl ?? "#ingressos";
 
@@ -43,6 +47,23 @@ export const lp = {
     { nome: "Kelly", sobrenome: "Higashi", papel: "Mentora", foto: "/img/palestrantes/kelly-higashi.webp" },
     { nome: "Lavínia", sobrenome: "Rocha", papel: "Influenciadora e empresária", foto: "/img/palestrantes/lavinia-rocha.webp", destaque: true },
   ] satisfies ConvidadaLp[],
+  anfitrias: [
+    {
+      nome: "Carol",
+      sobrenome: "Oliveira",
+      rotulo: "Anfitriã e idealizadora",
+      bio: carol.bio,
+      foto: carol.foto,
+      frase: marca.frases.proposito,
+    },
+    {
+      nome: "Lúcia",
+      sobrenome: "Parreira",
+      rotulo: "Parceira oficial · Relacionamento",
+      bio: "Formada em Letras com habilitação em Secretariado Executivo, com formação em Estética e cursos de Gastronomia. Casada há 23 anos com Sérgio e mãe do Lucas, de 3 anos. Parceira oficial do Elevation, cuida do relacionamento em todos os eventos.",
+      foto: "/img/equipe/lucia.webp",
+    },
+  ] satisfies Anfitria[],
   faq: [
     { pergunta: "Quando e onde acontece?", resposta: "Sexta-feira, 23 de outubro, a partir das 14h, no Royal Tennis, Espaço Gourmet, em Londrina, PR." },
     { pergunta: "Como pago meu ingresso?", resposta: "A compra é feita pela Kiwify, no Pix ou no cartão em até 12x." },
