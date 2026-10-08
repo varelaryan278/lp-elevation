@@ -2,7 +2,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cookies, headers } from "next/headers";
 import { notFound } from "next/navigation";
-import Painel from "@/app/painel/page";
+import Painel from "@/app/(site)/painel/page";
 import { listarPatrocinios, redisConfigurado } from "@/lib/redis";
 import { cookieAdmin, criarSessaoAdmin } from "@/lib/admin-auth";
 
