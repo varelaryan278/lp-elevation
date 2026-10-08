@@ -1,10 +1,11 @@
+import { existsSync } from "node:fs";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import NovoPage, { metadata } from "@/app/(lp)/novo/page";
+import NovoPage, { metadata } from "@/app/(lp)/page";
 import { evento, loteAtual } from "@/content/evento";
 import { marca } from "@/content/marca";
 
-describe("Página de conversão /novo", () => {
+describe("Página de conversão na home", () => {
   const html = renderToStaticMarkup(<NovoPage />);
 
   it("leva os CTAs de compra direto ao checkout do lote atual", () => {
@@ -25,7 +26,13 @@ describe("Página de conversão /novo", () => {
     expect(html).toContain("não garante vaga");
   });
 
-  it("fica fora dos buscadores enquanto é prévia", () => {
-    expect(metadata.robots).toMatchObject({ index: false });
+  it("pode ser indexada, já que é a home", () => {
+    expect(metadata.robots).toBeUndefined();
+  });
+
+  it("só usa fotos da edição que existem em public", () => {
+    for (const src of html.match(/\/img\/edicoes\/[^"&?]+\.webp/g) ?? []) {
+      expect(existsSync(`public${src}`)).toBe(true);
+    }
   });
 });

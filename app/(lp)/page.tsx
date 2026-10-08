@@ -23,7 +23,6 @@ import { lp } from "@/content/lp";
 export const metadata: Metadata = {
   title: { absolute: `Elevation · ${evento.dataLabel} em ${evento.cidade}` },
   description: `${lp.titulo.antes} ${lp.titulo.destaque.toLowerCase()} ${lp.titulo.depois}. ${lp.subtitulo}`,
-  robots: { index: false, follow: false },
 };
 
 const NovoPage = () => (
