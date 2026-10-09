@@ -7,7 +7,7 @@ type Props = { pessoa: AnfitriaData; invertido?: boolean };
 
 export const Anfitria = ({ pessoa, invertido = false }: Props) => (
   <div
-    className={`mx-auto grid max-w-5xl items-center gap-12 overflow-hidden rounded-[2.5rem] border border-bordo-line bg-bordo-soft p-6 md:gap-16 md:p-10 ${
+    className={`mx-auto grid max-w-5xl grid-cols-1 items-center gap-12 overflow-hidden rounded-[2.5rem] border border-bordo-line bg-bordo-soft p-6 md:gap-16 md:p-10 ${
       invertido ? "md:grid-cols-[1.1fr_0.9fr]" : "md:grid-cols-[0.9fr_1.1fr]"
     }`}
   >
@@ -32,7 +32,7 @@ export const Anfitria = ({ pessoa, invertido = false }: Props) => (
     >
       <p className="font-sans text-[11px] uppercase tracking-[0.35em] text-rose">{pessoa.rotulo}</p>
       <p className="mt-5 font-sans text-xs uppercase tracking-[0.3em] text-blush/70">{pessoa.nome}</p>
-      <p className="text-metal font-serif text-6xl uppercase leading-none tracking-[0.06em] md:text-7xl">
+      <p className="text-metal font-serif text-[clamp(2.25rem,10vw,3.75rem)] uppercase leading-none tracking-[0.06em] md:text-7xl">
         {pessoa.sobrenome}
       </p>
       <span aria-hidden className="mx-auto mt-6 block h-px w-12 bg-rose/60 md:mx-0" />

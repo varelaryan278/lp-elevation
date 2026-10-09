@@ -193,11 +193,11 @@ body {
   .paralaxe { transform: none; }
 }
 
-.apos-cortina {
-  --abertura: 1500ms;
+.after-curtain {
+  --opening: 1500ms;
 }
 
-.cortina-painel {
+.curtain-panel {
   background:
     linear-gradient(180deg, rgba(0,0,0,.45) 0%, transparent 18%, transparent 80%, rgba(0,0,0,.55) 100%),
     repeating-linear-gradient(90deg, #2a0710 0, #5a1426 3.2%, #7a2236 4.6%, #4a0f1f 6.4%, #2a0710 9%);
@@ -208,52 +208,56 @@ body {
   animation-fill-mode: both;
 }
 
-.cortina-esquerda {
-  animation-name: cortina-esquerda;
+.curtain-left {
+  animation-name: curtain-left;
   transform-origin: left center;
 }
 
-.cortina-direita {
-  animation-name: cortina-direita;
+.curtain-right {
+  animation-name: curtain-right;
   transform-origin: right center;
 }
 
-.cortina-selo {
-  animation: cortina-selo 1s ease-in .3s both;
+.curtain-seal {
+  animation: curtain-seal 1s ease-in .3s both;
 }
 
-.cortina {
-  animation: cortina-fim 0s linear 2.4s both;
+.curtain {
+  visibility: hidden;
+  animation: curtain-exit .1s linear 2.4s backwards;
 }
 
-@keyframes cortina-esquerda {
+@keyframes curtain-left {
   to { transform: translateX(-102%) skewX(-4deg); }
 }
 
-@keyframes cortina-direita {
+@keyframes curtain-right {
   to { transform: translateX(102%) skewX(4deg); }
 }
 
-@keyframes cortina-selo {
+@keyframes curtain-seal {
   0% { opacity: 1; transform: scale(1); }
   60% { opacity: 1; transform: scale(1.04); }
   100% { opacity: 0; transform: scale(.9); }
 }
 
-.cortina-barra {
-  animation: cortina-barra .6s ease-in 1.9s both;
+.curtain-bar {
+  animation: curtain-bar .6s ease-in 1.9s both;
 }
 
-@keyframes cortina-barra {
+@keyframes curtain-bar {
   to { transform: translateY(-110%); }
 }
 
-@keyframes cortina-fim {
+@keyframes curtain-exit {
+  from { visibility: visible; }
   to { visibility: hidden; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .apos-cortina { --abertura: 1500ms; }
+  .curtain { display: none; animation: none; }
+  .curtain-panel, .curtain-seal, .curtain-bar { animation: none; }
+  .after-curtain { --opening: 0ms; }
 }
 
 @keyframes surgir {
