@@ -14,7 +14,7 @@ export const lp = {
   subtitulo: "Elevando seus negócios, sua imagem e sua história.",
   diaSemana: "Sexta-feira",
   hora: "14h",
-  localDetalhe: "Espaço Gourmet",
+  localDetalhe: "Vila Siam",
   temas: ["Negócios", "Imagem", "Saúde mental", "Propósito"],
   pilares: ["Conteúdo", "Conexões reais", "Experiências exclusivas", "Oportunidades de crescimento"],
   numeros: [
@@ -44,7 +44,7 @@ export const lp = {
     { nome: "Lavínia", sobrenome: "Rocha", papel: "Influenciadora e empresária", foto: "/img/palestrantes/lavinia-rocha.webp", destaque: true },
   ] satisfies ConvidadaLp[],
   faq: [
-    { pergunta: "Quando e onde acontece?", resposta: "Sexta-feira, 23 de outubro, a partir das 14h, no Royal Tennis, Espaço Gourmet, em Londrina, PR." },
+    { pergunta: "Quando e onde acontece?", resposta: "Sexta-feira, 23 de outubro, a partir das 14h, na Villa Gioia, Av. Celso Garcia Cid, 1877, Vila Siam, em Londrina, PR." },
     { pergunta: "Como pago meu ingresso?", resposta: "A compra é feita pela Kiwify, no Pix ou no cartão em até 12x." },
     { pergunta: "Posso transferir meu ingresso para outra pessoa?", resposta: "Não. O titular do ingresso não pode ser alterado após a compra, então preencha os dados de quem vai participar." },
     { pergunta: "O valor muda?", resposta: "Sim. O ingresso é vendido em lotes e o valor sobe a cada virada de lote." },

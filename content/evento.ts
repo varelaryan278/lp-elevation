@@ -5,10 +5,10 @@ export const evento: Evento = {
   dataIso: "2026-10-23",
   dataLabel: "23 de outubro",
   horario: "14h às 19h",
-  local: "Royal Tennis",
-  endereco: "Endereço a confirmar",
+  local: "Villa Gioia",
+  endereco: "Av. Celso Garcia Cid, 1877 · Vila Siam",
   cidade: "Londrina, PR",
-  mapaUrl: "https://maps.google.com/?q=Royal+Tennis+Londrina+PR",
+  mapaUrl: "https://maps.google.com/?q=Villa+Gioia+Av.+Celso+Garcia+Cid+1877+Londrina+PR",
   programacao: [
     { horario: "14h", titulo: "Credenciamento e café", descricao: "Recepção, ambientação e primeiras conexões." },
     { horario: "15h", titulo: "Abertura", descricao: "Carol Oliveira apresenta a visão por trás do movimento." },
