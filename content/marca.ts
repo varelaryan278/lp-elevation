@@ -59,7 +59,7 @@ export const marca = {
     },
   },
   site: "https://elevation.com.br",
-  instagram: "https://instagram.com/elevation",
+  instagram: "https://instagram.com/elevationmulheres",
   email: "contato@elevation.com.br",
   whatsapp: "5543000000000",
   grupoWhatsapp: "https://chat.whatsapp.com/I2lDDGTGJVKEexKVmnX7iw",
