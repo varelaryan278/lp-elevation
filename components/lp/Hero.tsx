@@ -27,7 +27,7 @@ const IconeLocal = () => (
 );
 
 export const Hero = () => (
-  <section id="inicio" className="apos-cortina relative isolate flex min-h-svh items-center overflow-hidden bg-bordo-deep pt-36 pb-20">
+  <section id="inicio" className="after-curtain relative isolate flex min-h-svh items-center overflow-hidden bg-bordo-deep pt-36 pb-20">
     <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_50%_35%,#5c1426_0%,#2a0810_45%,#170509_80%)]" />
     <div aria-hidden className="halo absolute top-1/4 left-1/2 -z-10 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full bg-bordo/70 blur-[120px]" />
     <div aria-hidden className="grao absolute inset-0 -z-10 opacity-[0.07] mix-blend-overlay" />
@@ -35,7 +35,7 @@ export const Hero = () => (
       <div
         key={c.sobrenome}
         className={`absolute top-1/2 hidden w-56 animate-fade-up xl:block ${i === 0 ? "left-10 text-left" : "right-10 text-right"}`}
-        style={{ animationDelay: `calc(var(--abertura) + ${900 + i * 150}ms)` }}
+        style={{ animationDelay: `calc(var(--opening) + ${900 + i * 150}ms)` }}
       >
         <p className="font-sans text-[11px] uppercase tracking-[0.3em] text-rose">{c.nome}</p>
         <p className="mt-1 font-serif text-4xl uppercase tracking-[0.08em] text-blush">{c.sobrenome}</p>
@@ -53,39 +53,39 @@ export const Hero = () => (
     </ul>
 
     <div className="mx-auto w-full max-w-5xl px-5 text-center">
-      <div className="flutua mx-auto w-24 animate-fade-up [animation-delay:var(--abertura)] sm:w-28">
+      <div className="flutua mx-auto w-24 animate-fade-up [animation-delay:var(--opening)] sm:w-28">
         <Image src="/img/lp/monograma.webp" alt="Elevation" width={565} height={682} priority className="h-auto w-full" />
       </div>
-      <p className="mt-6 animate-fade-up font-serif text-3xl uppercase tracking-[0.45em] text-rose-light [animation-delay:calc(var(--abertura)+120ms)] sm:text-4xl">
+      <p className="mt-6 animate-fade-up font-serif text-3xl uppercase tracking-[0.45em] text-rose-light [animation-delay:calc(var(--opening)+120ms)] sm:text-4xl">
         Elevation
       </p>
-      <p className="mt-2 animate-fade-up font-sans text-[10px] uppercase tracking-[0.4em] text-blush/70 [animation-delay:calc(var(--abertura)+200ms)] sm:text-xs">
+      <p className="mt-2 animate-fade-up font-sans text-[10px] uppercase tracking-[0.4em] text-blush/70 [animation-delay:calc(var(--opening)+200ms)] sm:text-xs">
         {lp.rotulo}
       </p>
-      <p className="mx-auto mt-6 inline-flex animate-fade-up items-center gap-3 rounded-full border border-rose/30 px-4 py-1.5 font-sans text-[10px] uppercase tracking-[0.3em] text-rose-light [animation-delay:calc(var(--abertura)+260ms)]">
+      <p className="mx-auto mt-6 inline-flex animate-fade-up items-center gap-3 rounded-full border border-rose/30 px-4 py-1.5 font-sans text-[10px] uppercase tracking-[0.3em] text-rose-light [animation-delay:calc(var(--opening)+260ms)]">
         <span aria-hidden className="h-1.5 w-1.5 animate-pulse rounded-full bg-rose" />
         {evento.edicao}ª edição · {evento.cidade}
       </p>
 
-      <h1 className="mt-12 animate-fade-up [animation-delay:calc(var(--abertura)+320ms)]">
+      <h1 className="mt-12 animate-fade-up [animation-delay:calc(var(--opening)+320ms)]">
         <span className="block font-serif text-2xl uppercase tracking-[0.25em] text-blush sm:text-4xl">{lp.titulo.antes}</span>
         <span aria-label={lp.titulo.destaque} className="block font-serif text-[clamp(3.6rem,15vw,10rem)] leading-[0.9] font-medium uppercase">
           {Array.from(lp.titulo.destaque).map((letra, i) => (
-            <span key={i} aria-hidden className="letra text-metal" style={{ "--atraso": `calc(var(--abertura) + ${450 + i * 70}ms)` } as CSSProperties}>
+            <span key={i} aria-hidden className="letra text-metal" style={{ "--atraso": `calc(var(--opening) + ${450 + i * 70}ms)` } as CSSProperties}>
               {letra}
             </span>
           ))}
         </span>
         <span className="mt-2 block font-serif text-xl uppercase tracking-[0.3em] text-blush sm:text-3xl">{lp.titulo.depois}</span>
       </h1>
-      <p className="mx-auto mt-6 max-w-xl animate-fade-up font-sans text-xs uppercase tracking-[0.25em] text-blush/70 [animation-delay:calc(var(--abertura)+420ms)]">
+      <p className="mx-auto mt-6 max-w-xl animate-fade-up font-sans text-xs uppercase tracking-[0.25em] text-blush/70 [animation-delay:calc(var(--opening)+420ms)]">
         {lp.subtitulo}
       </p>
       {lp.convidadas.filter(especial).map((c) => (
         <a
           key={c.sobrenome}
           href="#convidadas"
-          className="mx-auto mt-8 flex w-fit animate-fade-up items-center gap-5 rounded-full border border-rose/40 bg-bordo-deep/50 py-2 pr-7 pl-2 backdrop-blur transition-colors hover:border-rose-light [animation-delay:calc(var(--abertura)+500ms)]"
+          className="mx-auto mt-8 flex w-fit animate-fade-up items-center gap-5 rounded-full border border-rose/40 bg-bordo-deep/50 py-2 pr-7 pl-2 backdrop-blur transition-colors hover:border-rose-light [animation-delay:calc(var(--opening)+500ms)]"
         >
           {c.foto && <Image src={c.foto} alt="" width={64} height={64} className="h-16 w-16 rounded-full object-cover object-top ring-1 ring-rose/60" />}
           <span className="text-left">
@@ -97,7 +97,7 @@ export const Hero = () => (
         </a>
       ))}
 
-      <dl className="mx-auto mt-10 grid max-w-3xl animate-fade-up grid-cols-1 gap-5 text-left [animation-delay:calc(var(--abertura)+520ms)] sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-rose/25">
+      <dl className="mx-auto mt-10 grid max-w-3xl animate-fade-up grid-cols-1 gap-5 text-left [animation-delay:calc(var(--opening)+520ms)] sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-rose/25">
         <div className="flex items-center gap-3 sm:justify-center sm:px-4">
           <IconeCalendario />
           <div>
@@ -124,7 +124,7 @@ export const Hero = () => (
         </div>
       </dl>
 
-      <div className="mt-12 flex animate-fade-up flex-col items-center justify-center gap-4 [animation-delay:calc(var(--abertura)+640ms)] sm:flex-row">
+      <div className="mt-12 flex animate-fade-up flex-col items-center justify-center gap-4 [animation-delay:calc(var(--opening)+640ms)] sm:flex-row">
         <CtaCompra className="w-full max-w-xs sm:w-auto">
           Garanta sua vaga{loteAtual ? ` · ${loteAtual.valor}` : ""}
         </CtaCompra>
@@ -136,7 +136,7 @@ export const Hero = () => (
         </p>
       )}
 
-      <div className="mt-14 animate-fade-up [animation-delay:calc(var(--abertura)+760ms)]">
+      <div className="mt-14 animate-fade-up [animation-delay:calc(var(--opening)+760ms)]">
         <Contagem />
       </div>
     </div>

@@ -30,6 +30,13 @@ describe("Página de conversão na home", () => {
     expect(metadata.robots).toBeUndefined();
   });
 
+  it("apresenta Carol e Lúcia como anfitriãs, com o papel de cada uma", () => {
+    expect(html).toContain("Anfitriã e idealizadora");
+    expect(html).toContain("Parceira oficial · Relacionamento");
+    expect(html).toContain("Parreira");
+    expect(html).toContain('alt="Retrato de Lúcia Parreira"');
+  });
+
   it("só usa fotos da edição que existem em public", () => {
     for (const src of html.match(/\/img\/edicoes\/[^"&?]+\.webp/g) ?? []) {
       expect(existsSync(`public${src}`)).toBe(true);

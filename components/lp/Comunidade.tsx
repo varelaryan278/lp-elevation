@@ -4,8 +4,8 @@ import { atraso } from "./Titulo";
 
 export const Comunidade = () => (
   <section className="bg-bordo-soft px-5 py-24 md:py-32">
-    <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2">
-      <div data-revelar className="flex flex-col rounded-3xl border border-bordo-line bg-bordo-deep p-10 md:p-12">
+    <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 md:grid-cols-2">
+      <div data-revelar className="flex flex-col rounded-3xl border border-bordo-line bg-bordo-deep p-6 sm:p-10 md:p-12">
         <p className="font-sans text-[11px] uppercase tracking-[0.35em] text-rose">Grupo gratuito</p>
         <h3 className="mt-6 font-serif text-4xl text-blush">
           Ainda não é hora? <em className="text-metal not-italic">Fique perto.</em>
@@ -21,7 +21,7 @@ export const Comunidade = () => (
         href={marca.instagram}
         target="_blank"
         rel="noopener noreferrer"
-        className="group relative flex flex-col overflow-hidden rounded-3xl border border-bordo-line bg-[radial-gradient(ellipse_at_80%_0%,#5c1426,#170509_70%)] p-10 md:p-12"
+        className="group relative flex flex-col overflow-hidden rounded-3xl border border-bordo-line bg-[radial-gradient(ellipse_at_80%_0%,#5c1426,#170509_70%)] p-6 sm:p-10 md:p-12"
       >
         <p className="font-sans text-[11px] uppercase tracking-[0.35em] text-rose">Instagram</p>
         <h3 className="mt-6 font-serif text-4xl text-blush">

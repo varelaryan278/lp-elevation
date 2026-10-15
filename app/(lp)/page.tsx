@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 };
 
 const NovoPage = () => (
-  <div className="bg-bordo-deep text-blush">
+  <div className="overflow-x-clip bg-bordo-deep text-blush">
     <Cortina />
     <Topo />
     <main>

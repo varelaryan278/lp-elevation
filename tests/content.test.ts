@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { carol } from "@/content/carol";
 import { convidadas } from "@/content/convidadas";
 import { edicoes } from "@/content/edicoes";
+import { lp } from "@/content/lp";
 import { marca } from "@/content/marca";
 
 const publicPath = (p: string) => `public${p}`;
@@ -30,7 +31,12 @@ describe("conteúdo", () => {
   });
 
   it("fotos referenciadas existem em public/", () => {
-    const fotos = [carol.foto, ...convidadas.map((c) => c.foto), ...edicoes.flatMap((e) => e.fotos)];
+    const fotos = [
+      carol.foto,
+      ...lp.anfitrias.map((a) => a.foto),
+      ...convidadas.map((c) => c.foto),
+      ...edicoes.flatMap((e) => e.fotos),
+    ];
     for (const foto of fotos) {
       expect(existsSync(publicPath(foto)), foto).toBe(true);
     }
